@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{9AF15922-A49C-1041-A09E-26992A0907D4}</ProjectGuid>
+    <RootNamespace>lrj</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>..\..\..\bin\windows\</OutDir>
+    <IntDir>obj\x64\Debug\</IntDir>
+    <TargetName>lrjd</TargetName>
+    <TargetExt>.exe</TargetExt>
+    <LinkIncremental>true</LinkIncremental>
+    <GenerateManifest>false</GenerateManifest>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>..\..\..\bin\windows\</OutDir>
+    <IntDir>obj\x32\Debug\</IntDir>
+    <TargetName>lrjd</TargetName>
+    <TargetExt>.exe</TargetExt>
+    <LinkIncremental>true</LinkIncremental>
+    <GenerateManifest>false</GenerateManifest>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>..\..\..\bin\windows\</OutDir>
+    <IntDir>obj\x64\Release\</IntDir>
+    <TargetName>lrj</TargetName>
+    <TargetExt>.exe</TargetExt>
+    <LinkIncremental>false</LinkIncremental>
+    <GenerateManifest>false</GenerateManifest>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>..\..\..\bin\windows\</OutDir>
+    <IntDir>obj\x32\Release\</IntDir>
+    <TargetName>lrj</TargetName>
+    <TargetExt>.exe</TargetExt>
+    <LinkIncremental>false</LinkIncremental>
+    <GenerateManifest>false</GenerateManifest>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>..\..\..\include;..\..\..\include\Scroll;..\..\..\include\Scroll\orx;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>__orxDEBUG__;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeader></PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+    <ExceptionHandling>false</ExceptionHandling>
+      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ProgramDataBaseFileName>$(OutDir)lrjd.pdb</ProgramDataBaseFileName>
+      <CompileAs>CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>__orxDEBUG__;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\..\include;..\..\..\include\Scroll;..\..\..\include\Scroll\orx;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>orxd.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)lrjd.exe</OutputFile>
+      <AdditionalLibraryDirectories>..\..\..\lib\windows;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
+      <TargetMachine>MachineX64</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>..\..\..\include;..\..\..\include\Scroll;..\..\..\include\Scroll\orx;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>__orxDEBUG__;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeader></PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+    <ExceptionHandling>false</ExceptionHandling>
+      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <ProgramDataBaseFileName>$(OutDir)lrjd.pdb</ProgramDataBaseFileName>
+      <CompileAs>CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>__orxDEBUG__;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\..\include;..\..\..\include\Scroll;..\..\..\include\Scroll\orx;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>orxd.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)lrjd.exe</OutputFile>
+      <AdditionalLibraryDirectories>..\..\..\lib\windows;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <Optimization>Full</Optimization>
+      <AdditionalIncludeDirectories>..\..\..\include;..\..\..\include\Scroll;..\..\..\include\Scroll\orx;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions></PreprocessorDefinitions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <StringPooling>true</StringPooling>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeader></PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+    <ExceptionHandling>false</ExceptionHandling>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ProgramDataBaseFileName>$(OutDir)lrj.pdb</ProgramDataBaseFileName>
+      <CompileAs>CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions></PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\..\include;..\..\..\include\Scroll;..\..\..\include\Scroll\orx;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>orx.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)lrj.exe</OutputFile>
+      <AdditionalLibraryDirectories>..\..\..\lib\windows;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
+      <TargetMachine>MachineX64</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <Optimization>Full</Optimization>
+      <AdditionalIncludeDirectories>..\..\..\include;..\..\..\include\Scroll;..\..\..\include\Scroll\orx;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions></PreprocessorDefinitions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <StringPooling>true</StringPooling>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeader></PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+    <ExceptionHandling>false</ExceptionHandling>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ProgramDataBaseFileName>$(OutDir)lrj.pdb</ProgramDataBaseFileName>
+      <CompileAs>CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions></PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\..\include;..\..\..\include\Scroll;..\..\..\include\Scroll\orx;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>orx.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)lrj.exe</OutputFile>
+      <AdditionalLibraryDirectories>..\..\..\lib\windows;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\include\lrj.h" />
+    <ClInclude Include="..\..\..\include\Scroll\Scroll.h" />
+    <ClInclude Include="..\..\..\include\Scroll\ScrollBase.h" />
+    <ClInclude Include="..\..\..\include\Scroll\ScrollEd.h" />
+    <ClInclude Include="..\..\..\include\Scroll\ScrollObject.h" />
+    <ClInclude Include="..\..\..\include\Scroll\orx\orx.h" />
+    <ClInclude Include="..\..\..\include\Scroll\orx\orxInclude.h" />
+    <ClInclude Include="..\..\..\include\Scroll\orx\orxKernel.h" />
+    <ClInclude Include="..\..\..\include\Scroll\orx\orxPluginAPI.h" />
+    <ClInclude Include="..\..\..\include\Scroll\orx\orxUtils.h" />
+    <ClInclude Include="..\..\..\include\Scroll\orx\anim\orxAnim.h" />
+    <ClInclude Include="..\..\..\include\Scroll\orx\anim\orxAnimPointer.h" />
+    <ClInclude Include="..\..\..\include\Scroll\orx\anim\orxAnimSet.h" />
+    <ClInclude Include="..\..\..\include\Scroll\orx\base\orxDecl.h" />
+    <ClInclude Include="..\..\..\include\Scroll\orx\base\orxModule.h" />
+    <ClInclude Include="..\..\..\include\Scroll\orx\base\orxType.h" />
+    <ClInclude Include="..\..\..\include\Scroll\orx\core\orxClock.h" />
+    <ClInclude Include="..\..\..\include\Scroll\orx\core\orxCommand.h" />
+    <ClInclude Include="..\..\..\include\Scroll\orx\core\orxConfig.h" />
+    <ClInclude Include="..\..\..\include\Scroll\orx\core\orxConsole.h" />
+    <ClInclude Include="..\..\..\include\Scroll\orx\core\orxEvent.h" />
+    <ClInclude Include="..\..\..\include\Scroll\orx\core\orxLocale.h" />
+    <ClInclude Include="..\..\..\include\Scroll\orx\core\orxResource.h" />
+    <ClInclude Include="..\..\..\include\Scroll\orx\core\orxSystem.h" />
+    <ClInclude Include="..\..\..\include\Scroll\orx\core\orxThread.h" />
+    <ClInclude Include="..\..\..\include\Scroll\orx\debug\orxDebug.h" />
+    <ClInclude Include="..\..\..\include\Scroll\orx\debug\orxFPS.h" />
+    <ClInclude Include="..\..\..\include\Scroll\orx\debug\orxProfiler.h" />
+    <ClInclude Include="..\..\..\include\Scroll\orx\display\orxDisplay.h" />
+    <ClInclude Include="..\..\..\include\Scroll\orx\display\orxFont.h" />
+    <ClInclude Include="..\..\..\include\Scroll\orx\display\orxGraphic.h" />
+    <ClInclude Include="..\..\..\include\Scroll\orx\display\orxScreenshot.h" />
+    <ClInclude Include="..\..\..\include\Scroll\orx\display\orxText.h" />
+    <ClInclude Include="..\..\..\include\Scroll\orx\display\orxTexture.h" />
+    <ClInclude Include="..\..\..\include\Scroll\orx\io\orxFile.h" />
+    <ClInclude Include="..\..\..\include\Scroll\orx\io\orxInput.h" />
+    <ClInclude Include="..\..\..\include\Scroll\orx\io\orxJoystick.h" />
+    <ClInclude Include="..\..\..\include\Scroll\orx\io\orxKeyboard.h" />
+    <ClInclude Include="..\..\..\include\Scroll\orx\io\orxMouse.h" />
+    <ClInclude Include="..\..\..\include\Scroll\orx\main\orxAndroid.h" />
+    <ClInclude Include="..\..\..\include\Scroll\orx\main\orxParam.h" />
+    <ClInclude Include="..\..\..\include\Scroll\orx\math\orxAABox.h" />
+    <ClInclude Include="..\..\..\include\Scroll\orx\math\orxMath.h" />
+    <ClInclude Include="..\..\..\include\Scroll\orx\math\orxOBox.h" />
+    <ClInclude Include="..\..\..\include\Scroll\orx\math\orxVector.h" />
+    <ClInclude Include="..\..\..\include\Scroll\orx\memory\orxBank.h" />
+    <ClInclude Include="..\..\..\include\Scroll\orx\memory\orxMemory.h" />
+    <ClInclude Include="..\..\..\include\Scroll\orx\object\orxFrame.h" />
+    <ClInclude Include="..\..\..\include\Scroll\orx\object\orxFX.h" />
+    <ClInclude Include="..\..\..\include\Scroll\orx\object\orxFXPointer.h" />
+    <ClInclude Include="..\..\..\include\Scroll\orx\object\orxObject.h" />
+    <ClInclude Include="..\..\..\include\Scroll\orx\object\orxSpawner.h" />
+    <ClInclude Include="..\..\..\include\Scroll\orx\object\orxStructure.h" />
+    <ClInclude Include="..\..\..\include\Scroll\orx\object\orxTimeLine.h" />
+    <ClInclude Include="..\..\..\include\Scroll\orx\physics\orxBody.h" />
+    <ClInclude Include="..\..\..\include\Scroll\orx\physics\orxPhysics.h" />
+    <ClInclude Include="..\..\..\include\Scroll\orx\plugin\orxPlugin.h" />
+    <ClInclude Include="..\..\..\include\Scroll\orx\plugin\orxPluginCore.h" />
+    <ClInclude Include="..\..\..\include\Scroll\orx\plugin\orxPluginType.h" />
+    <ClInclude Include="..\..\..\include\Scroll\orx\plugin\orxPluginUser.h" />
+    <ClInclude Include="..\..\..\include\Scroll\orx\plugin\define\orxPlugin_CoreDefine.h" />
+    <ClInclude Include="..\..\..\include\Scroll\orx\plugin\define\orxPlugin_CoreID.h" />
+    <ClInclude Include="..\..\..\include\Scroll\orx\plugin\define\orxPlugin_Display.h" />
+    <ClInclude Include="..\..\..\include\Scroll\orx\plugin\define\orxPlugin_Joystick.h" />
+    <ClInclude Include="..\..\..\include\Scroll\orx\plugin\define\orxPlugin_Keyboard.h" />
+    <ClInclude Include="..\..\..\include\Scroll\orx\plugin\define\orxPlugin_Mouse.h" />
+    <ClInclude Include="..\..\..\include\Scroll\orx\plugin\define\orxPlugin_Physics.h" />
+    <ClInclude Include="..\..\..\include\Scroll\orx\plugin\define\orxPlugin_Render.h" />
+    <ClInclude Include="..\..\..\include\Scroll\orx\plugin\define\orxPlugin_SoundSystem.h" />
+    <ClInclude Include="..\..\..\include\Scroll\orx\render\orxCamera.h" />
+    <ClInclude Include="..\..\..\include\Scroll\orx\render\orxRender.h" />
+    <ClInclude Include="..\..\..\include\Scroll\orx\render\orxShader.h" />
+    <ClInclude Include="..\..\..\include\Scroll\orx\render\orxShaderPointer.h" />
+    <ClInclude Include="..\..\..\include\Scroll\orx\render\orxViewport.h" />
+    <ClInclude Include="..\..\..\include\Scroll\orx\sound\orxSound.h" />
+    <ClInclude Include="..\..\..\include\Scroll\orx\sound\orxSoundPointer.h" />
+    <ClInclude Include="..\..\..\include\Scroll\orx\sound\orxSoundSystem.h" />
+    <ClInclude Include="..\..\..\include\Scroll\orx\utils\orxHashTable.h" />
+    <ClInclude Include="..\..\..\include\Scroll\orx\utils\orxLinkList.h" />
+    <ClInclude Include="..\..\..\include\Scroll\orx\utils\orxString.h" />
+    <ClInclude Include="..\..\..\include\Scroll\orx\utils\orxTree.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\lrj.cpp">
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="..\..\..\data\resource\lrj.rc" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

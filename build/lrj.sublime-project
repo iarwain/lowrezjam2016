@@ -1,0 +1,43 @@
+{
+  "folders":
+  [
+    {
+      "follow_symlinks": true,
+      "path": "../src"
+    },
+    {
+      "follow_symlinks": true,
+      "path": "../include"
+    },
+    {
+      "follow_symlinks": true,
+      "path": "../data"
+    },
+    {
+      "file_exclude_patterns":
+      [
+        "*.log",
+        "*.exe",
+        "*.dll",
+        "*.ilk",
+        "*.",
+        "*.dylib",
+        "*.so"
+      ],
+      "follow_symlinks": true,
+      "path": "../bin"
+    },
+    {
+      "follow_symlinks": true,
+      "path": "../wiki"
+    },
+    {
+      "folder_exclude_patterns":
+      [
+        "vs20*"
+      ],
+      "follow_symlinks": true,
+      "path": "../build"
+    }
+  ]
+}

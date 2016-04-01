@@ -1,0 +1,16 @@
+syntax: glob
+*.ncb
+*.suo
+*.pdb
+*.ilk
+*.idb
+*.user
+*.obj
+*.o
+*.log
+*.sublime-workspace
+obj
+*.cih
+dev.ini
+*.sav
+*sdf
