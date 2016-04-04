@@ -223,6 +223,14 @@ void LRJ::UpdateInput(const orxCLOCK_INFO &_rstInfo)
     // Pause game
     PauseGame(!IsGamePaused());
   }
+
+  if (orxInput_IsActive("Test"))
+  {
+	  orxVECTOR position = { 4, 4, 0.5 };
+	  ScrollObject *explosion = CreateObject("ExplosionObject");
+	  explosion->SetPosition(position);
+  }
+
 }
 
 void LRJ::Update(const orxCLOCK_INFO &_rstInfo)
@@ -241,6 +249,8 @@ void LRJ::Update(const orxCLOCK_INFO &_rstInfo)
       // Shoud start?
       if(orxInput_IsActive("Start"))
       {
+        CreateObject("PlayerObject");
+
         // Updates state
         meGameState = GameStateRun;
       }
@@ -336,7 +346,6 @@ orxSTATUS LRJ::Init()
 
   // Creates splash object
   CreateObject("O-Splash");
-
   // Done!
   return eResult;
 }
