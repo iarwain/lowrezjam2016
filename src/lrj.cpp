@@ -249,7 +249,9 @@ void LRJ::Update(const orxCLOCK_INFO &_rstInfo)
       // Shoud start?
       if(orxInput_IsActive("Start"))
       {
-        CreateObject("PlayerObject");
+		  CreateObject("PlayerObject");
+		  CreateObject("EnemyObject");
+		  CreateObject("EnemyObjectB");
 
         // Updates state
         meGameState = GameStateRun;
