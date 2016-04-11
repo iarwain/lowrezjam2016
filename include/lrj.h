@@ -49,6 +49,7 @@ private:
                 void            UpdateInput(const orxCLOCK_INFO &_rstInfo);
 
                 void            Update(const orxCLOCK_INFO &_rstInfo);
+                void            CameraUpdate(const orxCLOCK_INFO &_rstInfo);
 
                 orxSTATUS       Init();
                 orxSTATUS       Run();

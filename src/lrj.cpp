@@ -416,6 +416,10 @@ void LRJ::Update(const orxCLOCK_INFO &_rstInfo)
   }
 }
 
+void LRJ::CameraUpdate(const orxCLOCK_INFO &_rstInfo)
+{
+}
+
 orxSTATUS LRJ::Init()
 {
   orxVECTOR vPosition;
