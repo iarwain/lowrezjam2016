@@ -13,9 +13,124 @@
 
 
 //! Structs/Classes
+class Player : public ScrollObject
+{
+public:
+
+  orxBOOL IsInputActive(const orxSTRING _zInput, orxBOOL _bHasNewStatus = orxFALSE) const;
+
+protected:
+
+  void    OnCreate();
+  void    OnDelete();
+  void    Update(const orxCLOCK_INFO &_stInfo);
+
+
+private:
+
+  const orxSTRING mzID;
+        orxU64    mu64GunID;
+};
 
 
 //! Code
+
+orxBOOL Player::IsInputActive(const orxSTRING _zInput, orxBOOL _bHasNewStatus /* = orxFALSE */) const
+{
+  orxCHAR acInput[64];
+  orxBOOL bResult;
+
+  // Gets input name
+  orxString_NPrint(acInput, sizeof(acInput) - 1, "%s%s", mzID, _zInput);
+
+  // Updates result
+  bResult = orxInput_IsActive(acInput) && (!_bHasNewStatus || orxInput_HasNewStatus(acInput));
+
+  // Done!
+  return bResult;
+}
+
+void Player::OnCreate()
+{
+  orxCHAR acGun[64];
+
+  // Inits vars
+  mzID      = orxConfig_GetString("ID");
+  orxConfig_PushSection("RunTime");
+  orxString_NPrint(acGun, sizeof(acGun) - 1, "%s%s", mzID, "Gun");
+  mu64GunID = orxConfig_GetU64(acGun);
+  orxConfig_PopSection();
+}
+
+void Player::OnDelete()
+{
+}
+
+void Player::Update(const orxCLOCK_INFO &_stInfo)
+{
+  orxVECTOR     vSpeed = {}, vPos;
+  ScrollObject *poGun;
+  orxFLOAT      fSpeed, fRotation = -orxFLOAT_1;
+
+  // Gets speed
+  PushConfigSection();
+  fSpeed = orxConfig_GetFloat("Speed");
+  PopConfigSection();
+
+  // Left?
+  if(IsInputActive("Left"))
+  {
+    // Updates speed & orientation
+    vSpeed.fX -= fSpeed;
+    fRotation = orxMATH_KF_PI + orxMATH_KF_PI_BY_2;
+  }
+  // Right?
+  if(IsInputActive("Right"))
+  {
+    // Updates speed & orientation
+    vSpeed.fX += fSpeed;
+    fRotation = orxMATH_KF_PI_BY_2;
+  }
+  // Down?
+  if(IsInputActive("Down"))
+  {
+    // Updates speed & orientation
+    vSpeed.fY += fSpeed;
+    fRotation = orxMATH_KF_PI;
+  }
+  // Up?
+  if(IsInputActive("Up"))
+  {
+    // Updates speed & orientation
+    vSpeed.fY -= fSpeed;
+    fRotation = orxFLOAT_0;
+  }
+
+  // Applies speed
+  SetSpeed(vSpeed);
+
+  // Enforces proper alignment
+  GetPosition(vPos);
+  orxVector_Round(&vPos, &vPos);
+  SetPosition(vPos);
+
+  // Applies orientation
+  if(fRotation >= orxFLOAT_0)
+  {
+    SetRotation(fRotation);
+  }
+
+  // Finds gun
+  poGun = LRJ::GetInstance().GetObject(mu64GunID);
+
+  // Valid?
+  if(poGun)
+  {
+    // Updates its status
+    poGun->Enable(IsInputActive("Shoot"));
+  }
+}
+
 static orxBOOL orxFASTCALL SaveCallback(const orxSTRING _zSectionName, const orxSTRING _zKeyName, const orxSTRING _zFileName, orxBOOL _bUseEncryption)
 {
   //! Done!
@@ -365,6 +480,7 @@ void LRJ::Exit()
 void LRJ::BindObjects()
 {
   // Binds objects
+  ScrollBindObject<Player>("PlayerObject");
 }
 
 orxSTATUS orxFASTCALL LRJ::EventHandler(const orxEVENT *_pstEvent)
