@@ -337,6 +337,7 @@
     <None Include="..\..\..\data\config\lrjd.ini" />
     <None Include="..\..\..\data\config\objects.ini" />
     <None Include="..\..\..\data\config\player.ini" />
+    <None Include="..\..\..\data\config\sound.ini" />
     <None Include="..\..\..\data\config\text.ini" />
     <None Include="..\..\..\data\config\titles.ini" />
     <None Include="..\..\..\data\config\tracks.ini" />
