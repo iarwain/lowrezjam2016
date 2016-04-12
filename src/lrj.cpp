@@ -30,6 +30,7 @@ private:
 
   const orxSTRING mzID;
         orxU64    mu64GunID;
+        orxU64    mu64HeadID;
 };
 
 
@@ -52,13 +53,15 @@ orxBOOL Player::IsInputActive(const orxSTRING _zInput, orxBOOL _bHasNewStatus /*
 
 void Player::OnCreate()
 {
-  orxCHAR acGun[64];
+  orxCHAR acBuffer[64];
 
   // Inits vars
-  mzID      = orxConfig_GetString("ID");
+  mzID = orxConfig_GetString("ID");
   orxConfig_PushSection("RunTime");
-  orxString_NPrint(acGun, sizeof(acGun) - 1, "%s%s", mzID, "Gun");
-  mu64GunID = orxConfig_GetU64(acGun);
+  orxString_NPrint(acBuffer, sizeof(acBuffer) - 1, "%s%s", mzID, "Gun");
+  mu64GunID = orxConfig_GetU64(acBuffer);
+  orxString_NPrint(acBuffer, sizeof(acBuffer) - 1, "%s%s", mzID, "Head");
+  mu64HeadID = orxConfig_GetU64(acBuffer);
   orxConfig_PopSection();
 }
 
@@ -111,13 +114,23 @@ void Player::Update(const orxCLOCK_INFO &_stInfo)
 
   // Enforces proper alignment
   GetPosition(vPos);
-  orxVector_Round(&vPos, &vPos);
+  vPos.fX = orxMath_Floor(vPos.fX) + 0.5f;
+  vPos.fY = orxMath_Floor(vPos.fY) + 0.5f;
   SetPosition(vPos);
 
   // Applies orientation
   if(fRotation >= orxFLOAT_0)
   {
-    SetRotation(fRotation);
+    ScrollObject *poHead;
+
+    // Finds head
+    poHead = LRJ::GetInstance().GetObject(mu64HeadID);
+
+    // Found?
+    if(poHead)
+    {
+      poHead->SetRotation(fRotation);
+    }
   }
 
   // Finds gun
@@ -450,9 +463,6 @@ orxSTATUS LRJ::Init()
   orxCamera_GetPosition(GetMainCamera(), &vPosition);
   orxSoundSystem_SetListenerPosition(&vPosition);
 
-  // Registers event handler
-  orxEvent_AddHandler(orxEVENT_TYPE_SHADER, &EventHandler);
-
   // Creates splash object
   CreateObject("O-Splash");
 
@@ -485,71 +495,6 @@ void LRJ::BindObjects()
 {
   // Binds objects
   ScrollBindObject<Player>("PlayerObject");
-}
-
-orxSTATUS orxFASTCALL LRJ::EventHandler(const orxEVENT *_pstEvent)
-{
-  orxSTATUS eResult = orxSTATUS_SUCCESS;
-
-  // Depending on type
-  switch(_pstEvent->eType)
-  {
-    case orxEVENT_TYPE_SHADER:
-    {
-      // Param?
-      if(_pstEvent->eID == orxSHADER_EVENT_SET_PARAM)
-      {
-        orxSHADER_EVENT_PAYLOAD *pstPayload;
-
-        // Gets payload
-        pstPayload = (orxSHADER_EVENT_PAYLOAD *)_pstEvent->pstPayload;
-
-        // Ratio?
-        if(!orxString_Compare(pstPayload->zParamName, "ratio"))
-        {
-          orxFLOAT    fRatio = orxFLOAT_1;
-          orxTEXTURE *pstTexture;
-
-          // Gets object's texture
-          pstTexture = orxObject_GetWorkingTexture(orxOBJECT(_pstEvent->hSender));
-
-          // Valid?
-          if(pstTexture)
-          {
-            orxFLOAT fCameraWidth, fTextureWidth, fTextureHeight;
-
-            // Gets camera width
-            orxConfig_PushSection("MainCamera");
-            fCameraWidth = orxConfig_GetFloat("FrustumWidth");
-            orxConfig_PopSection();
-
-            // Gets texture's size
-            orxTexture_GetSize(pstTexture, &fTextureWidth, &fTextureHeight);
-
-            // Valid?
-            if(fTextureWidth > orxFLOAT_0)
-            {
-              // Updates ratio
-              fRatio = fCameraWidth / fTextureWidth;
-            }
-          }
-
-          // Updates param
-          pstPayload->fValue = fRatio;
-        }
-      }
-
-      break;
-    }
-
-    default:
-    {
-      break;
-    }
-  }
-
-  // Done!
-  return eResult;
 }
 
 int main(int argc, char **argv)

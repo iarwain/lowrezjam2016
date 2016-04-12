@@ -56,8 +56,6 @@ private:
                 void            Exit();
                 void            BindObjects();
 
-  static        orxSTATUS orxFASTCALL EventHandler(const orxEVENT *_pstEvent);
-
 
 private:
 
