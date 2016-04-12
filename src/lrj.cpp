@@ -53,15 +53,32 @@ orxBOOL Player::IsInputActive(const orxSTRING _zInput, orxBOOL _bHasNewStatus /*
 
 void Player::OnCreate()
 {
-  orxCHAR acBuffer[64];
+  orxCHAR       acBuffer[64];
+  ScrollObject *poCamera;
 
-  // Inits vars
+  // Inits ID
   mzID = orxConfig_GetString("ID");
+
+  // Pushes RunTime section
   orxConfig_PushSection("RunTime");
+
+  // Retrieves related object IDs
   orxString_NPrint(acBuffer, sizeof(acBuffer) - 1, "%s%s", mzID, "Gun");
   mu64GunID = orxConfig_GetU64(acBuffer);
   orxString_NPrint(acBuffer, sizeof(acBuffer) - 1, "%s%s", mzID, "Head");
   mu64HeadID = orxConfig_GetU64(acBuffer);
+
+  // Retrieves camera
+  poCamera = LRJ::GetInstance().GetObject(orxConfig_GetU64("Camera"));
+
+  // Found and not already attached to a player?
+  if(poCamera && !orxObject_GetParent(poCamera->GetOrxObject()))
+  {
+    // Sets ourself as parent
+    orxObject_SetParent(poCamera->GetOrxObject(), GetOrxObject());
+  }
+
+  // Pops config section
   orxConfig_PopSection();
 }
 
@@ -431,6 +448,54 @@ void LRJ::Update(const orxCLOCK_INFO &_rstInfo)
 
 void LRJ::CameraUpdate(const orxCLOCK_INFO &_rstInfo)
 {
+  ScrollObject *poCamera;
+
+  // Pushes RunTime section
+  orxConfig_PushSection("RunTime");
+
+  // Gets camera
+  poCamera = GetObject(orxConfig_GetU64("Camera"));
+
+  // Pops config section
+  orxConfig_PopSection();
+
+  // Found?
+  if(poCamera)
+  {
+    orxVECTOR   vPos;
+    orxOBJECT  *pstParent;
+
+    // Gets its parent
+    pstParent = orxOBJECT(orxObject_GetParent(poCamera->GetOrxObject()));
+
+    // Valid?
+    if(pstParent)
+    {
+      orxVECTOR vSpeed;
+
+      // Gets its speed
+      orxObject_GetSpeed(pstParent, &vSpeed);
+
+      // Non null?
+      if(!orxVector_IsNull(&vSpeed))
+      {
+        orxVECTOR vOffset = {};
+
+        // Gets offset
+        poCamera->GetPosition(vPos);
+        vOffset.fX = (vSpeed.fX != orxFLOAT_0) ? vSpeed.fX / orxMath_Abs(vSpeed.fX) * orxConfig_GetFloat("CameraOffset") : vPos.fX;
+        vOffset.fY = (vSpeed.fY != orxFLOAT_0) ? vSpeed.fY / orxMath_Abs(vSpeed.fY) * orxConfig_GetFloat("CameraOffset") : vPos.fY;
+
+        // Applies it
+        poCamera->SetPosition(*orxVector_Lerp(&vOffset, &vPos, &vOffset, orxConfig_GetFloat("CameraCoef")));
+      }
+    }
+
+    poCamera->GetPosition(vPos);
+    vPos.fX = orxMath_Floor(vPos.fX) + 0.5f;
+    vPos.fY = orxMath_Floor(vPos.fY) + 0.5f;
+    poCamera->SetPosition(vPos);
+  }
 }
 
 orxSTATUS LRJ::Init()
@@ -465,6 +530,9 @@ orxSTATUS LRJ::Init()
 
   // Creates splash object
   CreateObject("O-Splash");
+
+  // Sets camera parent
+  orxCamera_SetParent(GetMainCamera(), CreateObject("O-Camera")->GetOrxObject());
 
   // Done!
   return eResult;
