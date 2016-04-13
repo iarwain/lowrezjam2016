@@ -249,6 +249,10 @@ orxSTATUS LRJ::Bootstrap() const
 {
   orxSTATUS eResult = orxSTATUS_SUCCESS;
 
+  // Disables some debug messages
+  orxDEBUG_ENABLE_LEVEL(orxDEBUG_LEVEL_CONFIG, orxFALSE);
+  orxDEBUG_ENABLE_LEVEL(orxDEBUG_LEVEL_PROFILER, orxFALSE);
+
   // Inits custom Zip archive handler
   orxArchive_Init();
 
@@ -534,6 +538,9 @@ orxSTATUS LRJ::Init()
   // Sets camera parent
   orxCamera_SetParent(GetMainCamera(), CreateObject("O-Camera")->GetOrxObject());
 
+  // Adds event handler
+  orxEvent_AddHandler(orxEVENT_TYPE_SHADER, &EventHandler);
+
   // Done!
   return eResult;
 }
@@ -564,6 +571,56 @@ void LRJ::BindObjects()
   // Binds objects
   ScrollBindObject<Player>("PlayerObject");
 }
+
+orxSTATUS orxFASTCALL LRJ::EventHandler(const orxEVENT *_pstEvent)
+{
+  orxSTATUS eResult = orxSTATUS_SUCCESS;
+
+  // Depending on type
+  switch(_pstEvent->eType)
+  {
+    case orxEVENT_TYPE_SHADER:
+    {
+      // Param?
+      if(_pstEvent->eID == orxSHADER_EVENT_SET_PARAM)
+      {
+        orxSHADER_EVENT_PAYLOAD *pstPayload;
+
+        // Gets payload
+        pstPayload = (orxSHADER_EVENT_PAYLOAD *)_pstEvent->pstPayload;
+
+        // Camera position?
+        if(!orxString_Compare(pstPayload->zParamName, "CameraPos"))
+        {
+          ScrollObject *poCamera;
+
+          // Retrieves camera
+          orxConfig_PushSection("RunTime");
+          poCamera = LRJ::GetInstance().GetObject(orxConfig_GetU64("Camera"));
+          orxConfig_PopSection();
+
+          // Found?
+          if(poCamera)
+          {
+            // Updates parem
+            poCamera->GetPosition(pstPayload->vValue, orxTRUE);
+          }
+        }
+      }
+
+      break;
+    }
+
+    default:
+    {
+      break;
+    }
+  }
+
+  // Done!
+  return eResult;
+}
+
 
 int main(int argc, char **argv)
 {
