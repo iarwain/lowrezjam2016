@@ -23,6 +23,7 @@ protected:
 
   void    OnCreate();
   void    OnDelete();
+  orxBOOL OnCollide(ScrollObject *_poCollider, const orxSTRING _zPartName, const orxVECTOR &_rvPosition, const orxVECTOR &_rvNormal);
   void    Update(const orxCLOCK_INFO &_stInfo);
 
 
@@ -31,6 +32,21 @@ private:
   const orxSTRING mzID;
         orxU64    mu64GunID;
         orxU64    mu64HeadID;
+};
+
+class Enemy : public ScrollObject
+{
+public:
+
+protected:
+
+  void    OnCreate();
+  void    OnDelete();
+  orxBOOL OnCollide(ScrollObject *_poCollider, const orxSTRING _zPartName, const orxVECTOR &_rvPosition, const orxVECTOR &_rvNormal);
+  void    Update(const orxCLOCK_INFO &_stInfo);
+
+
+private:
 };
 
 
@@ -84,6 +100,31 @@ void Player::OnCreate()
 
 void Player::OnDelete()
 {
+  // Stops the game
+  orxInput_SetValue("Stop", orxFLOAT_1);
+}
+
+orxBOOL Player::OnCollide(ScrollObject *_poCollider, const orxSTRING _zPartName, const orxVECTOR &_rvPosition, const orxVECTOR &_rvNormal)
+{
+  ScrollObject *poExplosion;
+
+  // Creates explosion
+  poExplosion = LRJ::GetInstance().CreateObject("ExplosionObject");
+
+  // Success?
+  if(poExplosion)
+  {
+    orxVECTOR vPos;
+
+    // Updates it
+    poExplosion->SetPosition(GetPosition(vPos));
+  }
+  
+  // Death!
+  SetLifeTime(orxFLOAT_0);
+
+  // Done!
+  return orxTRUE;
 }
 
 void Player::Update(const orxCLOCK_INFO &_stInfo)
@@ -159,6 +200,24 @@ void Player::Update(const orxCLOCK_INFO &_stInfo)
     // Updates its status
     poGun->Enable(IsInputActive("Shoot"));
   }
+}
+
+void Enemy::OnCreate()
+{
+}
+
+void Enemy::OnDelete()
+{
+}
+
+orxBOOL Enemy::OnCollide(ScrollObject *_poCollider, const orxSTRING _zPartName, const orxVECTOR &_rvPosition, const orxVECTOR &_rvNormal)
+{
+  // Done!
+  return orxTRUE;
+}
+
+void Enemy::Update(const orxCLOCK_INFO &_stInfo)
+{
 }
 
 static orxBOOL orxFASTCALL SaveCallback(const orxSTRING _zSectionName, const orxSTRING _zKeyName, const orxSTRING _zFileName, orxBOOL _bUseEncryption)
@@ -405,6 +464,9 @@ void LRJ::Update(const orxCLOCK_INFO &_rstInfo)
       // Should end?
       if(orxInput_IsActive("Stop"))
       {
+        // Creates game over object
+        CreateObject("GameOverTitle");
+
         // Updates state
         meGameState = GameStateGameOver;
       }
@@ -570,6 +632,7 @@ void LRJ::BindObjects()
 {
   // Binds objects
   ScrollBindObject<Player>("PlayerObject");
+  ScrollBindObject<Enemy>("EnemyObject");
 }
 
 orxSTATUS orxFASTCALL LRJ::EventHandler(const orxEVENT *_pstEvent)
