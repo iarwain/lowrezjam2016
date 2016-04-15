@@ -84,6 +84,8 @@ void Player::OnCreate()
   orxString_NPrint(acBuffer, sizeof(acBuffer) - 1, "%s%s", mzID, "Head");
   mu64HeadID = orxConfig_GetU64(acBuffer);
 
+  orxU64 mu64PlayerGUID = orxConfig_GetU64("P1");
+
   // Retrieves camera
   poCamera = LRJ::GetInstance().GetObject(orxConfig_GetU64("Camera"));
 
@@ -528,7 +530,7 @@ void LRJ::CameraUpdate(const orxCLOCK_INFO &_rstInfo)
   // Found?
   if(poCamera)
   {
-    orxVECTOR   vPos;
+    orxVECTOR   vCameraPos;
     orxOBJECT  *pstParent;
 
     // Gets its parent
@@ -542,25 +544,68 @@ void LRJ::CameraUpdate(const orxCLOCK_INFO &_rstInfo)
       // Gets its speed
       orxObject_GetSpeed(pstParent, &vSpeed);
 
+      orxVECTOR vCameraOffset = {};
+
+      // Gets offset
+      poCamera->GetPosition(vCameraPos);
+      vCameraOffset.fX = (vSpeed.fX != orxFLOAT_0) ? vSpeed.fX / orxMath_Abs(vSpeed.fX) * orxConfig_GetFloat("CameraOffset") : vCameraPos.fX;
+      vCameraOffset.fY = (vSpeed.fY != orxFLOAT_0) ? vSpeed.fY / orxMath_Abs(vSpeed.fY) * orxConfig_GetFloat("CameraOffset") : vCameraPos.fY;
+
       // Non null?
       if(!orxVector_IsNull(&vSpeed))
       {
-        orxVECTOR vOffset = {};
-
-        // Gets offset
-        poCamera->GetPosition(vPos);
-        vOffset.fX = (vSpeed.fX != orxFLOAT_0) ? vSpeed.fX / orxMath_Abs(vSpeed.fX) * orxConfig_GetFloat("CameraOffset") : vPos.fX;
-        vOffset.fY = (vSpeed.fY != orxFLOAT_0) ? vSpeed.fY / orxMath_Abs(vSpeed.fY) * orxConfig_GetFloat("CameraOffset") : vPos.fY;
 
         // Applies it
-        poCamera->SetPosition(*orxVector_Lerp(&vOffset, &vPos, &vOffset, orxConfig_GetFloat("CameraCoef")));
+          poCamera->SetPosition(*orxVector_Lerp(&vCameraOffset, &vCameraPos, &vCameraOffset, orxConfig_GetFloat("CameraCoef")));
+      }
+      else 
+      {
+        orxConfig_PushSection("RunTime"); 
+
+        // Retrieve head for its rotation
+        orxU64 mu64HeadID = orxConfig_GetU64("P1Head");
+
+        orxConfig_PopSection();
+
+        orxVECTOR playerPos = {};
+        orxFLOAT playerHeadRotation = 0;
+              
+        ScrollObject *poHead;
+        poHead = LRJ::GetInstance().GetObject(mu64HeadID);
+
+        playerHeadRotation = poHead->GetRotation();
+
+        //Facing left or right? Center the camera.y
+        if (playerHeadRotation == orxMATH_KF_PI + orxMATH_KF_PI_BY_2 || playerHeadRotation == orxMATH_KF_PI_BY_2){
+          if (vCameraPos.fY < 0.0){
+            vCameraPos.fY += 0.6;
+            poCamera->SetPosition(vCameraPos);
+          }
+          if (vCameraPos.fY > 0.0){
+            vCameraPos.fY -= 0.6;
+            poCamera->SetPosition(vCameraPos);
+          }
+        }
+
+        //Facing up or down? Center the camera.x
+        if (playerHeadRotation == orxMATH_KF_PI || playerHeadRotation == orxFLOAT_0){
+          if (vCameraPos.fX < 0.0){
+            vCameraPos.fX += 0.6;
+            poCamera->SetPosition(vCameraPos);
+          }
+          if (vCameraPos.fX > 0.0){
+            vCameraPos.fX -= 0.6;
+            poCamera->SetPosition(vCameraPos);
+          }
+        }
+
       }
     }
 
-    poCamera->GetPosition(vPos);
-    vPos.fX = orxMath_Floor(vPos.fX) + 0.5f;
-    vPos.fY = orxMath_Floor(vPos.fY) + 0.5f;
-    poCamera->SetPosition(vPos);
+    poCamera->GetPosition(vCameraPos);
+    vCameraPos.fX = orxMath_Floor(vCameraPos.fX) + 0.5f;
+    vCameraPos.fY = orxMath_Floor(vCameraPos.fY) + 0.5f;
+    poCamera->SetPosition(vCameraPos);
   }
 }
 
