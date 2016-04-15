@@ -37,6 +37,7 @@ private:
 class Enemy : public ScrollObject
 {
 public:
+  int hitsBeforeDying;
 
 protected:
 
@@ -206,6 +207,10 @@ void Player::Update(const orxCLOCK_INFO &_stInfo)
 
 void Enemy::OnCreate()
 {
+  // get hitsBeforeDying value from the enemy config and populate the:
+  // hitsBeforeDying = <value>
+  //
+  // Create enemy close to the player, in a random radius from it.
 }
 
 void Enemy::OnDelete()
@@ -214,12 +219,22 @@ void Enemy::OnDelete()
 
 orxBOOL Enemy::OnCollide(ScrollObject *_poCollider, const orxSTRING _zPartName, const orxVECTOR &_rvPosition, const orxVECTOR &_rvNormal)
 {
+
+  // if colliding with a bullet
+  //    hitsBeforeDying--      
+  //    if hitsBeforeDying == 0
+  //      destroy enemy
+  //      decrement the LRJ::totalEnemiesRemainingInLevel
+
   // Done!
   return orxTRUE;
 }
 
 void Enemy::Update(const orxCLOCK_INFO &_stInfo)
 {
+  //
+  // Move the enemy towards the player's position.
+  //
 }
 
 static orxBOOL orxFASTCALL SaveCallback(const orxSTRING _zSectionName, const orxSTRING _zKeyName, const orxSTRING _zFileName, orxBOOL _bUseEncryption)
@@ -418,6 +433,14 @@ void LRJ::UpdateShader(const orxCLOCK_INFO &_rstInfo)
 
 void LRJ::UpdateGame(const orxCLOCK_INFO &_rstInfo)
 {
+  //
+  // Create an enemy type if one is required, by checking, for example:
+  //        Level5
+  //          if EnemyAAtOnce = 2 and there is only one on screen? 
+  //            Create another one if the
+  //            total onscreen + totalEnemiesRemainingInLevel < Config/Level5/TotalEnemies
+  //
+
   // Updates in-game time
   mdTime += orx2D(_rstInfo.fDT);
 
@@ -647,6 +670,13 @@ orxSTATUS LRJ::Init()
 
   // Adds event handler
   orxEvent_AddHandler(orxEVENT_TYPE_SHADER, &EventHandler);
+
+  //
+  // Load in totalEnemiesRemainingInLevel for the level from the config. Though this
+  // needs to be in a level load event of some sort.
+  //
+
+
 
   // Done!
   return eResult;

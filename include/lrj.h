@@ -65,6 +65,7 @@ private:
                 orxU64          mu64InteractionID;
                 orxDOUBLE       mdTime;
                 GameState       meGameState;
+                int             totalEnemiesRemainingInLevel;
 };
 
 #endif // __LRJ_H__
