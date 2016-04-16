@@ -49,6 +49,7 @@ protected:
 private:
 
   orxS32  ms32HP;
+  orxS32  ms32Score;
 };
 
 
@@ -210,6 +211,9 @@ void Enemy::OnCreate()
   ms32HP = orxConfig_GetS32("HP");
   orxASSERT(ms32HP);
 
+  // Gets score
+  ms32Score = orxConfig_GetS32("Score");
+
   // Increment enemy count
   LRJ::GetInstance().IncrementEnemyCount();
 
@@ -218,24 +222,33 @@ void Enemy::OnCreate()
 
 void Enemy::OnDelete()
 {
-  ScrollObject *poExplosion;
-
-  // Creates explosion
-  PushConfigSection();
-  poExplosion = LRJ::GetInstance().CreateObject(orxConfig_GetString("Explosion"));
-  PopConfigSection();
-
-  // Success?
-  if(poExplosion)
+  // Is game running?
+  if(LRJ::GetInstance().GetGameState() == LRJ::GameStateRun)
   {
-    orxVECTOR vPos;
+    ScrollObject *poExplosion;
 
-    // Updates it
-    poExplosion->SetPosition(GetPosition(vPos));
+    // Creates explosion
+    PushConfigSection();
+    poExplosion = LRJ::GetInstance().CreateObject(orxConfig_GetString("Explosion"));
+    PopConfigSection();
+
+    // Success?
+    if(poExplosion)
+    {
+      orxVECTOR vPos;
+
+      // Updates it
+      poExplosion->SetPosition(GetPosition(vPos));
+    }
+
+    // Decrements enemy count
+    LRJ::GetInstance().DecrementEnemyCount();
+
+    // Updates score
+    orxConfig_PushSection("RunTime");
+    orxConfig_SetS32("Score", orxConfig_GetS32("Score") + ms32Score);
+    orxConfig_PopSection();
   }
-
-  // Decrements enemy count
-  LRJ::GetInstance().DecrementEnemyCount();
 }
 
 orxBOOL Enemy::OnCollide(ScrollObject *_poCollider, const orxSTRING _zPartName, const orxVECTOR &_rvPosition, const orxVECTOR &_rvNormal)
@@ -503,6 +516,11 @@ void LRJ::Update(const orxCLOCK_INFO &_rstInfo)
       // Shoud start?
       if(orxInput_IsActive("Start"))
       {
+        // Clears score
+        orxConfig_PushSection("RunTime");
+        orxConfig_SetS32("Score", 0);
+        orxConfig_PopSection();
+
         // Updates state
         meGameState = GameStateRun;
       }
