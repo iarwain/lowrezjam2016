@@ -214,8 +214,11 @@ void Enemy::OnCreate()
   // Gets score
   ms32Score = orxConfig_GetS32("Score");
 
-  // Increment enemy count
-  LRJ::GetInstance().IncrementEnemyCount();
+  // Updates runtime variables
+  orxConfig_PushSection("RunTime");
+  orxConfig_SetS32("LiveEnemy", orxConfig_GetS32("LiveEnemy") + 1);
+  orxConfig_SetS32("EnemyLeft", orxConfig_GetS32("EnemyLeft") - 1);
+  orxConfig_PopSection();
 
   // Create enemy close to the player, in a random radius from it.
 }
@@ -241,12 +244,10 @@ void Enemy::OnDelete()
       poExplosion->SetPosition(GetPosition(vPos));
     }
 
-    // Decrements enemy count
-    LRJ::GetInstance().DecrementEnemyCount();
-
-    // Updates score
+    // Updates runtime variables
     orxConfig_PushSection("RunTime");
     orxConfig_SetS32("Score", orxConfig_GetS32("Score") + ms32Score);
+    orxConfig_SetS32("LiveEnemy", orxConfig_GetS32("LiveEnemy") - 1);
     orxConfig_PopSection();
   }
 }
@@ -276,7 +277,6 @@ orxBOOL Enemy::OnCollide(ScrollObject *_poCollider, const orxSTRING _zPartName, 
   orxVector_Add(&enemyPosition, &enemyPosition, &bulletSpeedVector);
 
   SetPosition(enemyPosition);
-
 
   // Kills collider
   _poCollider->SetLifeTime(orxFLOAT_0);
@@ -403,6 +403,75 @@ void LRJ::Reset()
   meGameState = GameStateReset;
 }
 
+void LRJ::CreateWave()
+{
+  const orxSTRING zName;
+  ScrollObject   *poEnemies;
+  orxS32          s32Level, s32Total;
+
+  // Deletes current wave
+  DeleteRunTimeObject("Wave");
+
+  // Gets levels & enemy root object
+  orxConfig_PushSection("RunTime");
+  s32Level = orxConfig_GetS32("Level");
+  poEnemies = GetObject(orxConfig_GetU64("Enemies"));
+  orxASSERT(poEnemies);
+  orxConfig_PopSection();
+
+  // Gets level name
+  orxConfig_PushSection("Game");
+  zName = orxConfig_GetListString("LevelList", s32Level % orxConfig_GetListCounter("LevelList"));
+  orxConfig_PopSection();
+
+  // Pushes level section
+  orxConfig_PushSection(zName);
+
+  // Disables enemies
+  poEnemies->Enable(orxFALSE);
+
+  // For all enemy spawners
+  for(orxOBJECT *pstChild = orxObject_GetOwnedChild(poEnemies->GetOrxObject());
+      pstChild;
+      pstChild = orxObject_GetOwnedSibling(pstChild))
+  {
+    orxSPAWNER *pstSpawner;
+
+    // Gets its spawner
+    pstSpawner = orxOBJECT_GET_STRUCTURE(pstChild, SPAWNER);
+
+    // Valid?
+    if(pstSpawner)
+    {
+      orxU32 u32ActiveObject;
+
+      // Gets number of active objects
+      u32ActiveObject = orxConfig_GetU32(orxObject_GetName(pstChild));
+
+      // Valid?
+      if(u32ActiveObject)
+      {
+        // Updates spawner
+        orxSpawner_SetActiveObjectLimit(pstSpawner, u32ActiveObject);
+        orxSpawner_Reset(pstSpawner);
+        orxObject_Enable(pstChild, orxTRUE);
+      }
+    }
+  }
+
+  // Updates enemy left count
+  s32Total = orxConfig_GetS32("TotalEnemies");
+  orxConfig_PushSection("RunTime");
+  orxConfig_SetS32("EnemyLeft", s32Total);
+  orxConfig_PopSection();
+
+  // Pops config section
+  orxConfig_PopSection();
+
+  // Creates wave
+  CreateObject("O-Wave");
+}
+
 void LRJ::UpdateInteraction(const orxCLOCK_INFO &_rstInfo)
 {
   orxVECTOR     vMousePos, vPickPos;
@@ -488,13 +557,45 @@ void LRJ::UpdateShader(const orxCLOCK_INFO &_rstInfo)
 
 void LRJ::UpdateGame(const orxCLOCK_INFO &_rstInfo)
 {
-  //
-  // Create an enemy type if one is required, by checking, for example:
-  //        Level5
-  //          if EnemyAAtOnce = 2 and there is only one on screen?
-  //            Create another one if the
-  //            total onscreen + totalEnemiesRemainingInLevel < Config/Level5/TotalEnemies
-  //
+  orxS32 s32LiveEnemy, s32EnemyLeft;
+
+  // Pushes runtime section
+  orxConfig_PushSection("RunTime");
+
+  // Gets current enemy counts
+  s32LiveEnemy = orxConfig_GetS32("LiveEnemy");
+  s32EnemyLeft = orxConfig_GetS32("EnemyLeft");
+
+  // No more spawning?
+  if(s32EnemyLeft <= 0)
+  {
+    // End of wave?
+    if(s32LiveEnemy == 0)
+    {
+      // Gets next level
+      orxConfig_SetS32("Level", orxConfig_GetS32("Level") + 1);
+
+      // Creates wave
+      CreateWave();
+    }
+    else
+    {
+      ScrollObject *poEnemies;
+
+      // Gets enemy root object
+      poEnemies = GetObject(orxConfig_GetU64("Enemies"));
+
+      // Valid?
+      if(poEnemies)
+      {
+        // Disables it
+        poEnemies->Enable(orxFALSE);
+      }
+    }
+  }
+
+  // Pops section
+  orxConfig_PopSection();
 
   // Updates in-game time
   mdTime += orx2D(_rstInfo.fDT);
@@ -529,13 +630,19 @@ void LRJ::Update(const orxCLOCK_INFO &_rstInfo)
       // Shoud start?
       if(orxInput_IsActive("Start"))
       {
-        // Clears score
+        // Clears RunTime variables
         orxConfig_PushSection("RunTime");
         orxConfig_SetS32("Score", 0);
+        orxConfig_SetS32("LiveEnemy", 0);
+        orxConfig_SetS32("EnemyLeft", 0);
+        orxConfig_SetS32("Level", 0);
         orxConfig_PopSection();
 
         // Creates scene
         CreateObject("O-Scene");
+
+        // Creates wave
+        CreateWave();
 
         // Updates state
         meGameState = GameStateRun;
@@ -602,9 +709,6 @@ void LRJ::Update(const orxCLOCK_INFO &_rstInfo)
       // Creates splash object
       CreateObject("O-Reset");
 
-      // Clears enemy count
-      mu32EnemyCount = 0;
-
       // Updates state
       meGameState = GameStateInit;
 
@@ -663,12 +767,8 @@ void LRJ::CameraUpdate(const orxCLOCK_INFO &_rstInfo)
         }
         else
         {
-          orxConfig_PushSection("RunTime");
-
           // Retrieve head for its rotation
           orxU64 mu64HeadID = orxConfig_GetU64("P1Head");
-
-          orxConfig_PopSection();
 
           ScrollObject *poHead = LRJ::GetInstance().GetObject(mu64HeadID);
 
@@ -731,7 +831,6 @@ orxSTATUS LRJ::Init()
   meGameState       = GameStateInit;
   mu64InteractionID = 0;
   mdTime            = orx2D(0.0);
-  mu32EnemyCount    = 0;
   orxVector_Copy(&mvMousePosition, &orxVECTOR_0);
 
   // Loads config
@@ -761,13 +860,6 @@ orxSTATUS LRJ::Init()
 
   // Adds event handler
   orxEvent_AddHandler(orxEVENT_TYPE_SHADER, &EventHandler);
-
-  //
-  // Load in totalEnemiesRemainingInLevel for the level from the config. Though this
-  // needs to be in a level load event of some sort.
-  //
-
-
 
   // Done!
   return eResult;
