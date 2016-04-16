@@ -265,6 +265,19 @@ orxBOOL Enemy::OnCollide(ScrollObject *_poCollider, const orxSTRING _zPartName, 
     SetLifeTime(orxFLOAT_0);
   }
 
+  //get direction of bullet and apply collision bounceback on the enemy
+  orxVECTOR bulletSpeedVector = {};
+  _poCollider->GetSpeed(bulletSpeedVector);
+
+  orxVECTOR enemyPosition = {};
+  GetPosition(enemyPosition);
+
+  orxVector_Divf(&bulletSpeedVector, &bulletSpeedVector, 50);
+  orxVector_Add(&enemyPosition, &enemyPosition, &bulletSpeedVector);
+
+  SetPosition(enemyPosition);
+
+
   // Kills collider
   _poCollider->SetLifeTime(orxFLOAT_0);
 
