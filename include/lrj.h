@@ -61,7 +61,6 @@ private:
 
 private:
 
-                orxVECTOR       mvMousePosition;
                 orxU64          mu64InteractionID;
                 orxDOUBLE       mdTime;
                 GameState       meGameState;

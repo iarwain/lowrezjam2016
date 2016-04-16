@@ -207,6 +207,8 @@ void Player::Update(const orxCLOCK_INFO &_stInfo)
 
 void Enemy::OnCreate()
 {
+  orxVECTOR vPos, vOffset;
+
   // Gets HP
   ms32HP = orxConfig_GetS32("HP");
   orxASSERT(ms32HP);
@@ -220,7 +222,13 @@ void Enemy::OnCreate()
   orxConfig_SetS32("EnemyLeft", orxConfig_GetS32("EnemyLeft") - 1);
   orxConfig_PopSection();
 
-  // Create enemy close to the player, in a random radius from it.
+  // Gets offset
+  orxConfig_PushSection("Game");
+  orxConfig_GetVector("EnemySpawnOffset", &vOffset);
+  orxConfig_PopSection();
+
+  // Updates position
+  SetPosition(*orxVector_Add(&vPos, &GetPosition(vPos), orxVector_FromSphericalToCartesian(&vOffset, &vOffset)));
 }
 
 void Enemy::OnDelete()
@@ -474,19 +482,21 @@ void LRJ::CreateWave()
 
 void LRJ::UpdateInteraction(const orxCLOCK_INFO &_rstInfo)
 {
-  orxVECTOR     vMousePos, vPickPos;
+  orxVECTOR     vPickPos = {};
   orxU64        u64PickedID = 0;
-  ScrollObject *poPickedObject = orxNULL, *poInteractionObject;
+  ScrollObject *poPickedObject = orxNULL, *poInteractionObject, *poCamera;
 
-  // Gets world mouse position
-  if(orxRender_GetWorldPosition(orxMouse_GetPosition(&vMousePos), orxNULL, &vMousePos) != orxNULL)
+  // Gets camera position
+  orxConfig_PushSection("RunTime");
+  poCamera = GetObject(orxConfig_GetU64("Camera"));
+  if(poCamera)
   {
-    // Stores it
-    orxVector_Set(&mvMousePosition, vMousePos.fX, vMousePos.fY, orxFLOAT_0);
+    poCamera->GetPosition(vPickPos, orxTRUE);
   }
+  orxConfig_PopSection();
 
   // Gets picking position
-  orxVector_Set(&vPickPos, mvMousePosition.fX, mvMousePosition.fY, -orxFLOAT_1);
+  orxVector_Set(&vPickPos, vPickPos.fX, vPickPos.fY, -orxFLOAT_1);
 
   // For all pickable groups
   for(orxU32 i = 0, u32Number = orxConfig_GetListCounter("PickGroupList"); i < u32Number; i++)
@@ -696,6 +706,9 @@ void LRJ::Update(const orxCLOCK_INFO &_rstInfo)
       {
         // Deletes scene
         DeleteRunTimeObject("GameOver");
+
+        // Deletes scene
+        DeleteRunTimeObject("Scene");
       }
 
       break;
@@ -831,7 +844,6 @@ orxSTATUS LRJ::Init()
   meGameState       = GameStateInit;
   mu64InteractionID = 0;
   mdTime            = orx2D(0.0);
-  orxVector_Copy(&mvMousePosition, &orxVECTOR_0);
 
   // Loads config
   Load();
