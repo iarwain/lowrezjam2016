@@ -781,7 +781,9 @@ void LRJ::CameraUpdate(const orxCLOCK_INFO &_rstInfo)
         else
         {
           // Retrieve head for its rotation
+          orxConfig_PushSection("RunTime");
           orxU64 mu64HeadID = orxConfig_GetU64("P1Head");
+          orxConfig_PopSection();
 
           ScrollObject *poHead = LRJ::GetInstance().GetObject(mu64HeadID);
 
