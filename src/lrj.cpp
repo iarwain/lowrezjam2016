@@ -48,8 +48,9 @@ protected:
 
 private:
 
-  orxS32  ms32HP;
-  orxS32  ms32Score;
+  orxS32    ms32HP;
+  orxS32    ms32Score;
+  orxFLOAT  mfSpeed;
 };
 
 
@@ -216,6 +217,9 @@ void Enemy::OnCreate()
   // Gets score
   ms32Score = orxConfig_GetS32("Score");
 
+  // Gets speed
+  mfSpeed = orxConfig_GetFloat("Speed");
+
   // Updates runtime variables
   orxConfig_PushSection("RunTime");
   orxConfig_SetS32("LiveEnemy", orxConfig_GetS32("LiveEnemy") + 1);
@@ -295,9 +299,29 @@ orxBOOL Enemy::OnCollide(ScrollObject *_poCollider, const orxSTRING _zPartName, 
 
 void Enemy::Update(const orxCLOCK_INFO &_stInfo)
 {
-  //
-  // Move the enemy towards the player's position.
-  //
+  orxVECTOR vSpeed = {};
+  Player   *poPlayer;
+
+  // Gets player
+  orxConfig_PushSection("RunTime");
+  poPlayer = LRJ::GetInstance().GetObject<Player>(orxConfig_GetU64("P1"));
+  orxConfig_PopSection();
+
+  // Valid?
+  if(poPlayer)
+  {
+    orxVECTOR vPos, vPlayerPos;
+
+    // Gets its position
+    poPlayer->GetPosition(vPlayerPos);
+
+    // Computes speed
+    orxVector_Mulf(&vSpeed, orxVector_Normalize(&vSpeed, orxVector_Sub(&vSpeed, &vPlayerPos, &GetPosition(vPos))), mfSpeed);
+
+  }
+
+  // Applies speed
+  SetSpeed(vSpeed);
 }
 
 static orxBOOL orxFASTCALL SaveCallback(const orxSTRING _zSectionName, const orxSTRING _zKeyName, const orxSTRING _zFileName, orxBOOL _bUseEncryption)
