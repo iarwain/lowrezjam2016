@@ -32,6 +32,9 @@ public:
 
                 void            DeleteRunTimeObject(const orxSTRING _zObjectName);
 
+                void            IncrementEnemyCount()       {mu32EnemyCount++;}
+                void            DecrementEnemyCount()       {mu32EnemyCount--;}
+
 
 private:
 
@@ -65,7 +68,7 @@ private:
                 orxU64          mu64InteractionID;
                 orxDOUBLE       mdTime;
                 GameState       meGameState;
-                int             totalEnemiesRemainingInLevel;
+                orxU32          mu32EnemyCount;
 };
 
 #endif // __LRJ_H__

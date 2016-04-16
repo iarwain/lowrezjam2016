@@ -1639,9 +1639,6 @@ orxSTATUS orxFASTCALL ScrollBase::StaticEventHandler(const orxEVENT *_pstEvent)
             // Valid?
             if(poObject)
             {
-              // Clears internal reference
-              poObject->SetOrxObject(orxNULL);
-
               // Uses it
               poBinder->DeleteObject(poObject, orxObject_GetName(pstObject));
             }
