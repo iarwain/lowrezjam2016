@@ -366,5 +366,8 @@
     <None Include="..\..\..\data\config\sound.ini">
       <Filter>ini</Filter>
     </None>
+    <None Include="..\..\..\data\config\levels.ini">
+      <Filter>ini</Filter>
+    </None>
   </ItemGroup>
 </Project>

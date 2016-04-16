@@ -37,7 +37,6 @@ private:
 class Enemy : public ScrollObject
 {
 public:
-  int hitsBeforeDying;
 
 protected:
 
@@ -48,6 +47,9 @@ protected:
 
 
 private:
+
+  orxS32  ms32HP;
+  orxS32  ms32Score;
 };
 
 
@@ -85,8 +87,6 @@ void Player::OnCreate()
   orxString_NPrint(acBuffer, sizeof(acBuffer) - 1, "%s%s", mzID, "Head");
   mu64HeadID = orxConfig_GetU64(acBuffer);
 
-  orxU64 mu64PlayerGUID = orxConfig_GetU64("P1");
-
   // Retrieves camera
   poCamera = LRJ::GetInstance().GetObject(orxConfig_GetU64("Camera"));
 
@@ -103,12 +103,6 @@ void Player::OnCreate()
 
 void Player::OnDelete()
 {
-  // Stops the game
-  orxInput_SetValue("Stop", orxFLOAT_1);
-}
-
-orxBOOL Player::OnCollide(ScrollObject *_poCollider, const orxSTRING _zPartName, const orxVECTOR &_rvPosition, const orxVECTOR &_rvNormal)
-{
   ScrollObject *poExplosion;
 
   // Creates explosion
@@ -122,7 +116,13 @@ orxBOOL Player::OnCollide(ScrollObject *_poCollider, const orxSTRING _zPartName,
     // Updates it
     poExplosion->SetPosition(GetPosition(vPos));
   }
-  
+
+  // Stops the game
+  orxInput_SetValue("Stop", orxFLOAT_1);
+}
+
+orxBOOL Player::OnCollide(ScrollObject *_poCollider, const orxSTRING _zPartName, const orxVECTOR &_rvPosition, const orxVECTOR &_rvNormal)
+{
   // Death!
   SetLifeTime(orxFLOAT_0);
 
@@ -207,24 +207,79 @@ void Player::Update(const orxCLOCK_INFO &_stInfo)
 
 void Enemy::OnCreate()
 {
-  // get hitsBeforeDying value from the enemy config and populate the:
-  // hitsBeforeDying = <value>
-  //
+  // Gets HP
+  ms32HP = orxConfig_GetS32("HP");
+  orxASSERT(ms32HP);
+
+  // Gets score
+  ms32Score = orxConfig_GetS32("Score");
+
+  // Increment enemy count
+  LRJ::GetInstance().IncrementEnemyCount();
+
   // Create enemy close to the player, in a random radius from it.
 }
 
 void Enemy::OnDelete()
 {
+  // Is game running?
+  if(LRJ::GetInstance().GetGameState() == LRJ::GameStateRun)
+  {
+    ScrollObject *poExplosion;
+
+    // Creates explosion
+    PushConfigSection();
+    poExplosion = LRJ::GetInstance().CreateObject(orxConfig_GetString("Explosion"));
+    PopConfigSection();
+
+    // Success?
+    if(poExplosion)
+    {
+      orxVECTOR vPos;
+
+      // Updates it
+      poExplosion->SetPosition(GetPosition(vPos));
+    }
+
+    // Decrements enemy count
+    LRJ::GetInstance().DecrementEnemyCount();
+
+    // Updates score
+    orxConfig_PushSection("RunTime");
+    orxConfig_SetS32("Score", orxConfig_GetS32("Score") + ms32Score);
+    orxConfig_PopSection();
+  }
 }
 
 orxBOOL Enemy::OnCollide(ScrollObject *_poCollider, const orxSTRING _zPartName, const orxVECTOR &_rvPosition, const orxVECTOR &_rvNormal)
 {
+  // Updates HP
+  _poCollider->PushConfigSection();
+  ms32HP -= orxConfig_GetU32("Damage");
+  _poCollider->PopConfigSection();
 
-  // if colliding with a bullet
-  //    hitsBeforeDying--      
-  //    if hitsBeforeDying == 0
-  //      destroy enemy
-  //      decrement the LRJ::totalEnemiesRemainingInLevel
+  // Dead?
+  if(ms32HP <= 0)
+  {
+    // Death!
+    SetLifeTime(orxFLOAT_0);
+  }
+
+  //get direction of bullet and apply collision bounceback on the enemy
+  orxVECTOR bulletSpeedVector = {};
+  _poCollider->GetSpeed(bulletSpeedVector);
+
+  orxVECTOR enemyPosition = {};
+  GetPosition(enemyPosition);
+
+  orxVector_Divf(&bulletSpeedVector, &bulletSpeedVector, 50);
+  orxVector_Add(&enemyPosition, &enemyPosition, &bulletSpeedVector);
+
+  SetPosition(enemyPosition);
+
+
+  // Kills collider
+  _poCollider->SetLifeTime(orxFLOAT_0);
 
   // Done!
   return orxTRUE;
@@ -239,7 +294,7 @@ void Enemy::Update(const orxCLOCK_INFO &_stInfo)
 
 static orxBOOL orxFASTCALL SaveCallback(const orxSTRING _zSectionName, const orxSTRING _zKeyName, const orxSTRING _zFileName, orxBOOL _bUseEncryption)
 {
-  //! Done!
+  // Done!
   return (orxString_Compare(_zSectionName, "Save") == 0) ? orxTRUE : orxFALSE;
 }
 
@@ -436,7 +491,7 @@ void LRJ::UpdateGame(const orxCLOCK_INFO &_rstInfo)
   //
   // Create an enemy type if one is required, by checking, for example:
   //        Level5
-  //          if EnemyAAtOnce = 2 and there is only one on screen? 
+  //          if EnemyAAtOnce = 2 and there is only one on screen?
   //            Create another one if the
   //            total onscreen + totalEnemiesRemainingInLevel < Config/Level5/TotalEnemies
   //
@@ -474,8 +529,23 @@ void LRJ::Update(const orxCLOCK_INFO &_rstInfo)
       // Shoud start?
       if(orxInput_IsActive("Start"))
       {
+        // Clears score
+        orxConfig_PushSection("RunTime");
+        orxConfig_SetS32("Score", 0);
+        orxConfig_PopSection();
+
+        // Creates scene
+        CreateObject("O-Scene");
+
         // Updates state
         meGameState = GameStateRun;
+      }
+
+      // Leaving?
+      if(meGameState != GameStateInit)
+      {
+        // Deletes scene
+        DeleteRunTimeObject("Menu");
       }
 
       break;
@@ -490,7 +560,7 @@ void LRJ::Update(const orxCLOCK_INFO &_rstInfo)
       if(orxInput_IsActive("Stop"))
       {
         // Creates game over object
-        CreateObject("GameOverTitle");
+        CreateObject("GameOver");
 
         // Updates state
         meGameState = GameStateGameOver;
@@ -500,13 +570,6 @@ void LRJ::Update(const orxCLOCK_INFO &_rstInfo)
       {
         // Resets
         Reset();
-      }
-
-      // Leaving?
-      if(meGameState != GameStateRun)
-      {
-        // Deletes scene
-        DeleteRunTimeObject("Scene");
       }
 
       break;
@@ -521,13 +584,26 @@ void LRJ::Update(const orxCLOCK_INFO &_rstInfo)
         Reset();
       }
 
+      // Leaving?
+      if(meGameState != GameStateGameOver)
+      {
+        // Deletes scene
+        DeleteRunTimeObject("GameOver");
+      }
+
       break;
     }
 
     case GameStateReset:
     {
+      // Deletes scene
+      DeleteRunTimeObject("Scene");
+
       // Creates splash object
       CreateObject("O-Reset");
+
+      // Clears enemy count
+      mu32EnemyCount = 0;
 
       // Updates state
       meGameState = GameStateInit;
@@ -562,66 +638,80 @@ void LRJ::CameraUpdate(const orxCLOCK_INFO &_rstInfo)
     // Valid?
     if(pstParent)
     {
-      orxVECTOR vSpeed;
-
-      // Gets its speed
-      orxObject_GetSpeed(pstParent, &vSpeed);
-
-      orxVECTOR vCameraOffset = {};
-
-      // Gets offset
-      poCamera->GetPosition(vCameraPos);
-      vCameraOffset.fX = (vSpeed.fX != orxFLOAT_0) ? vSpeed.fX / orxMath_Abs(vSpeed.fX) * orxConfig_GetFloat("CameraOffset") : vCameraPos.fX;
-      vCameraOffset.fY = (vSpeed.fY != orxFLOAT_0) ? vSpeed.fY / orxMath_Abs(vSpeed.fY) * orxConfig_GetFloat("CameraOffset") : vCameraPos.fY;
-
-      // Non null?
-      if(!orxVector_IsNull(&vSpeed))
+      // In game?
+      if((meGameState == GameStateRun)
+      || (meGameState == GameStateGameOver))
       {
+        orxVECTOR vSpeed;
 
-        // Applies it
-          poCamera->SetPosition(*orxVector_Lerp(&vCameraOffset, &vCameraPos, &vCameraOffset, orxConfig_GetFloat("CameraCoef")));
+        // Gets its speed
+        orxObject_GetSpeed(pstParent, &vSpeed);
+
+        orxVECTOR vCameraOffset = {};
+
+        // Gets offset
+        poCamera->GetPosition(vCameraPos);
+        vCameraOffset.fX = (vSpeed.fX != orxFLOAT_0) ? vSpeed.fX / orxMath_Abs(vSpeed.fX) * orxConfig_GetFloat("CameraOffset") : vCameraPos.fX;
+        vCameraOffset.fY = (vSpeed.fY != orxFLOAT_0) ? vSpeed.fY / orxMath_Abs(vSpeed.fY) * orxConfig_GetFloat("CameraOffset") : vCameraPos.fY;
+
+        // Non null?
+        if(!orxVector_IsNull(&vSpeed))
+        {
+
+          // Applies it
+            poCamera->SetPosition(*orxVector_Lerp(&vCameraOffset, &vCameraPos, &vCameraOffset, orxConfig_GetFloat("CameraCoef")));
+        }
+        else
+        {
+          orxConfig_PushSection("RunTime");
+
+          // Retrieve head for its rotation
+          orxU64 mu64HeadID = orxConfig_GetU64("P1Head");
+
+          orxConfig_PopSection();
+
+          ScrollObject *poHead = LRJ::GetInstance().GetObject(mu64HeadID);
+
+          if(poHead)
+          {
+            orxFLOAT playerHeadRotation = poHead->GetRotation();
+
+            //Facing left or right? Center the camera.y
+            if(playerHeadRotation == orxMATH_KF_PI + orxMATH_KF_PI_BY_2 || playerHeadRotation == orxMATH_KF_PI_BY_2)
+            {
+              if(vCameraPos.fY < 0.0)
+              {
+                vCameraPos.fY += 0.6;
+                poCamera->SetPosition(vCameraPos);
+              }
+              if(vCameraPos.fY > 0.0)
+              {
+                vCameraPos.fY -= 0.6;
+                poCamera->SetPosition(vCameraPos);
+              }
+            }
+
+            //Facing up or down? Center the camera.x
+            if(playerHeadRotation == orxMATH_KF_PI || playerHeadRotation == orxFLOAT_0)
+            {
+              if(vCameraPos.fX < 0.0)
+              {
+                vCameraPos.fX += 0.6;
+                poCamera->SetPosition(vCameraPos);
+              }
+              if(vCameraPos.fX > 0.0)
+              {
+                vCameraPos.fX -= 0.6;
+                poCamera->SetPosition(vCameraPos);
+              }
+            }
+          }
+        }
       }
-      else 
+      else
       {
-        orxConfig_PushSection("RunTime"); 
-
-        // Retrieve head for its rotation
-        orxU64 mu64HeadID = orxConfig_GetU64("P1Head");
-
-        orxConfig_PopSection();
-
-        orxVECTOR playerPos = {};
-        orxFLOAT playerHeadRotation = 0;
-              
-        ScrollObject *poHead;
-        poHead = LRJ::GetInstance().GetObject(mu64HeadID);
-
-        playerHeadRotation = poHead->GetRotation();
-
-        //Facing left or right? Center the camera.y
-        if (playerHeadRotation == orxMATH_KF_PI + orxMATH_KF_PI_BY_2 || playerHeadRotation == orxMATH_KF_PI_BY_2){
-          if (vCameraPos.fY < 0.0){
-            vCameraPos.fY += 0.6;
-            poCamera->SetPosition(vCameraPos);
-          }
-          if (vCameraPos.fY > 0.0){
-            vCameraPos.fY -= 0.6;
-            poCamera->SetPosition(vCameraPos);
-          }
-        }
-
-        //Facing up or down? Center the camera.x
-        if (playerHeadRotation == orxMATH_KF_PI || playerHeadRotation == orxFLOAT_0){
-          if (vCameraPos.fX < 0.0){
-            vCameraPos.fX += 0.6;
-            poCamera->SetPosition(vCameraPos);
-          }
-          if (vCameraPos.fX > 0.0){
-            vCameraPos.fX -= 0.6;
-            poCamera->SetPosition(vCameraPos);
-          }
-        }
-
+        // Resets position
+        poCamera->SetPosition(orxVECTOR_0);
       }
     }
 
@@ -641,6 +731,7 @@ orxSTATUS LRJ::Init()
   meGameState       = GameStateInit;
   mu64InteractionID = 0;
   mdTime            = orx2D(0.0);
+  mu32EnemyCount    = 0;
   orxVector_Copy(&mvMousePosition, &orxVECTOR_0);
 
   // Loads config

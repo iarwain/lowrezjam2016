@@ -333,6 +333,7 @@
     <None Include="..\..\..\data\config\enemy.ini" />
     <None Include="..\..\..\data\config\explosion.ini" />
     <None Include="..\..\..\data\config\game.ini" />
+    <None Include="..\..\..\data\config\levels.ini" />
     <None Include="..\..\..\data\config\lrj.ini" />
     <None Include="..\..\..\data\config\lrjd.ini" />
     <None Include="..\..\..\data\config\objects.ini" />
