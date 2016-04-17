@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|x64">
@@ -67,7 +67,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>..\..\..\bin\windows\</OutDir>
     <IntDir>obj\x64\Debug\</IntDir>
-    <TargetName>lrjd</TargetName>
+    <TargetName>ytterbited</TargetName>
     <TargetExt>.exe</TargetExt>
     <LinkIncremental>true</LinkIncremental>
     <GenerateManifest>false</GenerateManifest>
@@ -75,7 +75,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>..\..\..\bin\windows\</OutDir>
     <IntDir>obj\x32\Debug\</IntDir>
-    <TargetName>lrjd</TargetName>
+    <TargetName>ytterbited</TargetName>
     <TargetExt>.exe</TargetExt>
     <LinkIncremental>true</LinkIncremental>
     <GenerateManifest>false</GenerateManifest>
@@ -83,7 +83,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>..\..\..\bin\windows\</OutDir>
     <IntDir>obj\x64\Release\</IntDir>
-    <TargetName>lrj</TargetName>
+    <TargetName>ytterbite</TargetName>
     <TargetExt>.exe</TargetExt>
     <LinkIncremental>false</LinkIncremental>
     <GenerateManifest>false</GenerateManifest>
@@ -91,7 +91,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>..\..\..\bin\windows\</OutDir>
     <IntDir>obj\x32\Release\</IntDir>
-    <TargetName>lrj</TargetName>
+    <TargetName>ytterbite</TargetName>
     <TargetExt>.exe</TargetExt>
     <LinkIncremental>false</LinkIncremental>
     <GenerateManifest>false</GenerateManifest>
@@ -112,7 +112,7 @@
       <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
       <FloatingPointModel>Fast</FloatingPointModel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <ProgramDataBaseFileName>$(OutDir)lrjd.pdb</ProgramDataBaseFileName>
+      <ProgramDataBaseFileName>$(OutDir)ytterbited.pdb</ProgramDataBaseFileName>
       <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <ResourceCompile>
@@ -123,7 +123,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>orxd.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(OutDir)lrjd.exe</OutputFile>
+      <OutputFile>$(OutDir)ytterbited.exe</OutputFile>
       <AdditionalLibraryDirectories>..\..\..\lib\windows;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
       <TargetMachine>MachineX64</TargetMachine>
@@ -145,7 +145,7 @@
       <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
       <FloatingPointModel>Fast</FloatingPointModel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <ProgramDataBaseFileName>$(OutDir)lrjd.pdb</ProgramDataBaseFileName>
+      <ProgramDataBaseFileName>$(OutDir)ytterbited.pdb</ProgramDataBaseFileName>
       <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <ResourceCompile>
@@ -156,7 +156,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>orxd.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(OutDir)lrjd.exe</OutputFile>
+      <OutputFile>$(OutDir)ytterbited.exe</OutputFile>
       <AdditionalLibraryDirectories>..\..\..\lib\windows;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
       <TargetMachine>MachineX86</TargetMachine>
@@ -180,7 +180,7 @@
       <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
       <FloatingPointModel>Fast</FloatingPointModel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <ProgramDataBaseFileName>$(OutDir)lrj.pdb</ProgramDataBaseFileName>
+      <ProgramDataBaseFileName>$(OutDir)ytterbite.pdb</ProgramDataBaseFileName>
       <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <ResourceCompile>
@@ -194,7 +194,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>orx.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(OutDir)lrj.exe</OutputFile>
+      <OutputFile>$(OutDir)ytterbite.exe</OutputFile>
       <AdditionalLibraryDirectories>..\..\..\lib\windows;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
       <TargetMachine>MachineX64</TargetMachine>
@@ -218,7 +218,7 @@
       <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
       <FloatingPointModel>Fast</FloatingPointModel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <ProgramDataBaseFileName>$(OutDir)lrj.pdb</ProgramDataBaseFileName>
+      <ProgramDataBaseFileName>$(OutDir)ytterbite.pdb</ProgramDataBaseFileName>
       <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <ResourceCompile>
@@ -232,7 +232,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>orx.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(OutDir)lrj.exe</OutputFile>
+      <OutputFile>$(OutDir)ytterbite.exe</OutputFile>
       <AdditionalLibraryDirectories>..\..\..\lib\windows;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
       <TargetMachine>MachineX86</TargetMachine>
@@ -334,8 +334,8 @@
     <None Include="..\..\..\data\config\explosion.ini" />
     <None Include="..\..\..\data\config\game.ini" />
     <None Include="..\..\..\data\config\levels.ini" />
-    <None Include="..\..\..\data\config\lrj.ini" />
-    <None Include="..\..\..\data\config\lrjd.ini" />
+    <None Include="..\..\..\data\config\ytterbite.ini" />
+    <None Include="..\..\..\data\config\ytterbited.ini" />
     <None Include="..\..\..\data\config\objects.ini" />
     <None Include="..\..\..\data\config\player.ini" />
     <None Include="..\..\..\data\config\sound.ini" />
