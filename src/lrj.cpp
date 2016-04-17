@@ -336,6 +336,14 @@ void Enemy::Update(const orxCLOCK_INFO &_stInfo)
 
     // Computes speed
     orxVector_Mulf(&vSpeed, orxVector_Normalize(&vSpeed, orxVector_Sub(&vSpeed, &vPlayerPos, &GetPosition(vPos))), mfSpeed);
+
+    // Enemy to far from player? Reverse enemy position to other side of the player
+    orxFLOAT distance = orxVector_GetDistance(&vPlayerPos, &vPos);
+    if (distance > 100){
+      orxVector_Lerp(&vPos, &vPos, &vPlayerPos, 2);
+      SetPosition(vPos);
+    }
+
   }
 
   // Applies speed
