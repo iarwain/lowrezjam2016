@@ -466,8 +466,8 @@ orxSTATUS LRJ::Bootstrap() const
   orxArchive_Init();
 
   // Adds default release config paths
-  orxResource_AddStorage(orxCONFIG_KZ_RESOURCE_GROUP, "../data.lrj", orxFALSE);
-  orxResource_AddStorage(orxCONFIG_KZ_RESOURCE_GROUP, "data.lrj", orxFALSE);
+  orxResource_AddStorage(orxCONFIG_KZ_RESOURCE_GROUP, "../data.ytb", orxFALSE);
+  orxResource_AddStorage(orxCONFIG_KZ_RESOURCE_GROUP, "data.ytb", orxFALSE);
   orxResource_AddStorage(orxCONFIG_KZ_RESOURCE_GROUP, "../../data/config", orxFALSE);
   orxResource_AddStorage(orxCONFIG_KZ_RESOURCE_GROUP, "../data/config", orxFALSE);
 
