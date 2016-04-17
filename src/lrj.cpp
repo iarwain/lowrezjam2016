@@ -32,6 +32,7 @@ private:
   const orxSTRING mzID;
         orxU64    mu64GunID;
         orxU64    mu64HeadID;
+  const orxSTRING mzLastInput;
 };
 
 class Enemy : public ScrollObject
@@ -78,6 +79,9 @@ void Player::OnCreate()
 
   // Inits ID
   mzID = orxConfig_GetString("ID");
+
+  // Inits last input
+  mzLastInput = orxNULL;
 
   // Pushes RunTime section
   orxConfig_PushSection("RunTime");
@@ -136,39 +140,63 @@ void Player::Update(const orxCLOCK_INFO &_stInfo)
   orxVECTOR     vSpeed = {}, vPos;
   ScrollObject *poGun;
   orxFLOAT      fSpeed, fRotation = -orxFLOAT_1;
+  orxBOOL       bKeepRotation = orxFALSE;
 
   // Gets speed
   PushConfigSection();
   fSpeed = orxConfig_GetFloat("Speed");
   PopConfigSection();
 
+  // Last input still active?
+  if(mzLastInput && IsInputActive(mzLastInput))
+  {
+    // Keeps rotation
+    bKeepRotation = orxTRUE;
+  }
+
   // Left?
   if(IsInputActive("Left"))
   {
     // Updates speed & orientation
     vSpeed.fX -= fSpeed;
-    fRotation = orxMATH_KF_PI + orxMATH_KF_PI_BY_2;
+    if(IsInputActive("Left", orxTRUE) || !bKeepRotation)
+    {
+      fRotation = orxMATH_KF_PI + orxMATH_KF_PI_BY_2;
+      mzLastInput = "Left";
+    }
   }
   // Right?
   if(IsInputActive("Right"))
   {
     // Updates speed & orientation
     vSpeed.fX += fSpeed;
-    fRotation = orxMATH_KF_PI_BY_2;
+    if(IsInputActive("Right", orxTRUE) || !bKeepRotation)
+    {
+      fRotation = orxMATH_KF_PI_BY_2;
+      mzLastInput = "Right";
+    }
   }
   // Down?
   if(IsInputActive("Down"))
   {
     // Updates speed & orientation
     vSpeed.fY += fSpeed;
-    fRotation = orxMATH_KF_PI;
+    if(IsInputActive("Down", orxTRUE) || !bKeepRotation)
+    {
+      fRotation = orxMATH_KF_PI;
+      mzLastInput = "Down";
+    }
   }
   // Up?
   if(IsInputActive("Up"))
   {
     // Updates speed & orientation
     vSpeed.fY -= fSpeed;
-    fRotation = orxFLOAT_0;
+    if(IsInputActive("Up", orxTRUE) || !bKeepRotation)
+    {
+      fRotation = orxFLOAT_0;
+      mzLastInput = "Up";
+    }
   }
 
   // Applies speed
