@@ -1,0 +1,584 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 45;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		62D25853407B6BBA0DBB019E /* lrj.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4EA6299036C419121A6447E6 /* lrj.cpp */; };
+		4BC25F2C58205988210649EB /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1081174F76F4239942745DAE /* Foundation.framework */; };
+		1F742C6207881EE95F6836FC /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A5B1A9745996BC24392360D /* AppKit.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		764D502F782A35BD36C40B5E /* Scroll.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "Scroll.h"; path = "../../../include/Scroll/Scroll.h"; sourceTree = "<group>"; };
+		51A010097D63736376291CB3 /* ScrollBase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "ScrollBase.h"; path = "../../../include/Scroll/ScrollBase.h"; sourceTree = "<group>"; };
+		4790477D6F370B8E234046FF /* ScrollEd.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "ScrollEd.h"; path = "../../../include/Scroll/ScrollEd.h"; sourceTree = "<group>"; };
+		1CBA0E30267A17FC4E236261 /* ScrollObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "ScrollObject.h"; path = "../../../include/Scroll/ScrollObject.h"; sourceTree = "<group>"; };
+		72C166C4711E01583E420E7E /* orxAnim.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "orxAnim.h"; path = "../../../include/Scroll/orx/anim/orxAnim.h"; sourceTree = "<group>"; };
+		2591060756584985693112C1 /* orxAnimPointer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "orxAnimPointer.h"; path = "../../../include/Scroll/orx/anim/orxAnimPointer.h"; sourceTree = "<group>"; };
+		6A6474EB24974EFB01E97CC7 /* orxAnimSet.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "orxAnimSet.h"; path = "../../../include/Scroll/orx/anim/orxAnimSet.h"; sourceTree = "<group>"; };
+		74951FBB4AA20C3D274C0983 /* orxDecl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "orxDecl.h"; path = "../../../include/Scroll/orx/base/orxDecl.h"; sourceTree = "<group>"; };
+		209658C02C23635923ED49BC /* orxModule.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "orxModule.h"; path = "../../../include/Scroll/orx/base/orxModule.h"; sourceTree = "<group>"; };
+		6C574D91297B517D794675BB /* orxType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "orxType.h"; path = "../../../include/Scroll/orx/base/orxType.h"; sourceTree = "<group>"; };
+		34161DCE73F43B3676D55980 /* orxClock.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "orxClock.h"; path = "../../../include/Scroll/orx/core/orxClock.h"; sourceTree = "<group>"; };
+		003E1CA2589476BB190F2AA0 /* orxCommand.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "orxCommand.h"; path = "../../../include/Scroll/orx/core/orxCommand.h"; sourceTree = "<group>"; };
+		74D976B57EE9328A3F1D2762 /* orxConfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "orxConfig.h"; path = "../../../include/Scroll/orx/core/orxConfig.h"; sourceTree = "<group>"; };
+		3F5248074A4A6FC028CF3BBB /* orxConsole.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "orxConsole.h"; path = "../../../include/Scroll/orx/core/orxConsole.h"; sourceTree = "<group>"; };
+		76A23AFC130A02DA62B45562 /* orxEvent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "orxEvent.h"; path = "../../../include/Scroll/orx/core/orxEvent.h"; sourceTree = "<group>"; };
+		414E1F864049203D1E671166 /* orxLocale.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "orxLocale.h"; path = "../../../include/Scroll/orx/core/orxLocale.h"; sourceTree = "<group>"; };
+		6E7966CB2409013D64064DFF /* orxResource.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "orxResource.h"; path = "../../../include/Scroll/orx/core/orxResource.h"; sourceTree = "<group>"; };
+		54147ABC0619019456AB10F9 /* orxSystem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "orxSystem.h"; path = "../../../include/Scroll/orx/core/orxSystem.h"; sourceTree = "<group>"; };
+		6FF4018707AB083A2A48645C /* orxThread.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "orxThread.h"; path = "../../../include/Scroll/orx/core/orxThread.h"; sourceTree = "<group>"; };
+		4403292C0BD5594762DD2B40 /* orxDebug.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "orxDebug.h"; path = "../../../include/Scroll/orx/debug/orxDebug.h"; sourceTree = "<group>"; };
+		7ACC71C21C8D257E7E221FA4 /* orxFPS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "orxFPS.h"; path = "../../../include/Scroll/orx/debug/orxFPS.h"; sourceTree = "<group>"; };
+		07BF15625CE33F106B2E2B4F /* orxProfiler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "orxProfiler.h"; path = "../../../include/Scroll/orx/debug/orxProfiler.h"; sourceTree = "<group>"; };
+		7E7B7959552704DB6F533BCF /* orxDisplay.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "orxDisplay.h"; path = "../../../include/Scroll/orx/display/orxDisplay.h"; sourceTree = "<group>"; };
+		446B60721C9C6E5B1D9474C1 /* orxFont.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "orxFont.h"; path = "../../../include/Scroll/orx/display/orxFont.h"; sourceTree = "<group>"; };
+		59BA6F501D0B40A610FF11ED /* orxGraphic.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "orxGraphic.h"; path = "../../../include/Scroll/orx/display/orxGraphic.h"; sourceTree = "<group>"; };
+		172A05F479DD3BFB1C2E46E6 /* orxScreenshot.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "orxScreenshot.h"; path = "../../../include/Scroll/orx/display/orxScreenshot.h"; sourceTree = "<group>"; };
+		34A631F377B679B709432DC3 /* orxText.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "orxText.h"; path = "../../../include/Scroll/orx/display/orxText.h"; sourceTree = "<group>"; };
+		02121430142E648F253231B7 /* orxTexture.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "orxTexture.h"; path = "../../../include/Scroll/orx/display/orxTexture.h"; sourceTree = "<group>"; };
+		25D559332F7A2A1C4C4A32D6 /* orxFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "orxFile.h"; path = "../../../include/Scroll/orx/io/orxFile.h"; sourceTree = "<group>"; };
+		1F6807B841D6088F13CE7873 /* orxInput.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "orxInput.h"; path = "../../../include/Scroll/orx/io/orxInput.h"; sourceTree = "<group>"; };
+		7046130C0F2211CF6B005F98 /* orxJoystick.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "orxJoystick.h"; path = "../../../include/Scroll/orx/io/orxJoystick.h"; sourceTree = "<group>"; };
+		167049BC7A6F2BDD58716C07 /* orxKeyboard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "orxKeyboard.h"; path = "../../../include/Scroll/orx/io/orxKeyboard.h"; sourceTree = "<group>"; };
+		7DC256787583796D72A20D64 /* orxMouse.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "orxMouse.h"; path = "../../../include/Scroll/orx/io/orxMouse.h"; sourceTree = "<group>"; };
+		000701A0547E58D45C1E68EA /* orxAndroid.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "orxAndroid.h"; path = "../../../include/Scroll/orx/main/orxAndroid.h"; sourceTree = "<group>"; };
+		0C6E49883D92685C7800046F /* orxParam.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "orxParam.h"; path = "../../../include/Scroll/orx/main/orxParam.h"; sourceTree = "<group>"; };
+		7ED75C711364140305BA2B2F /* orxAABox.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "orxAABox.h"; path = "../../../include/Scroll/orx/math/orxAABox.h"; sourceTree = "<group>"; };
+		4DDB13262BC87B402F2E789B /* orxMath.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "orxMath.h"; path = "../../../include/Scroll/orx/math/orxMath.h"; sourceTree = "<group>"; };
+		2B437B8D72370E476E79590A /* orxOBox.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "orxOBox.h"; path = "../../../include/Scroll/orx/math/orxOBox.h"; sourceTree = "<group>"; };
+		2244463841EF5B8B2C7204A5 /* orxVector.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "orxVector.h"; path = "../../../include/Scroll/orx/math/orxVector.h"; sourceTree = "<group>"; };
+		3142049C45F9739619437F45 /* orxBank.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "orxBank.h"; path = "../../../include/Scroll/orx/memory/orxBank.h"; sourceTree = "<group>"; };
+		3489219609405DD551B239A1 /* orxMemory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "orxMemory.h"; path = "../../../include/Scroll/orx/memory/orxMemory.h"; sourceTree = "<group>"; };
+		1F3B681A26196BE533C9050E /* orxFX.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "orxFX.h"; path = "../../../include/Scroll/orx/object/orxFX.h"; sourceTree = "<group>"; };
+		1AD746525E633F4A229035A1 /* orxFXPointer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "orxFXPointer.h"; path = "../../../include/Scroll/orx/object/orxFXPointer.h"; sourceTree = "<group>"; };
+		7476276B7B7700597AC951F1 /* orxFrame.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "orxFrame.h"; path = "../../../include/Scroll/orx/object/orxFrame.h"; sourceTree = "<group>"; };
+		5E4A08464E696982082405CD /* orxObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "orxObject.h"; path = "../../../include/Scroll/orx/object/orxObject.h"; sourceTree = "<group>"; };
+		0A327D3F34833E12138E7DC8 /* orxSpawner.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "orxSpawner.h"; path = "../../../include/Scroll/orx/object/orxSpawner.h"; sourceTree = "<group>"; };
+		1053688067BF459D70C870F3 /* orxStructure.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "orxStructure.h"; path = "../../../include/Scroll/orx/object/orxStructure.h"; sourceTree = "<group>"; };
+		183F552E529B6C3811DF0750 /* orxTimeLine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "orxTimeLine.h"; path = "../../../include/Scroll/orx/object/orxTimeLine.h"; sourceTree = "<group>"; };
+		1C6342751D9759F42E794890 /* orx.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "orx.h"; path = "../../../include/Scroll/orx/orx.h"; sourceTree = "<group>"; };
+		1FE66D530312432E28C279AA /* orxInclude.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "orxInclude.h"; path = "../../../include/Scroll/orx/orxInclude.h"; sourceTree = "<group>"; };
+		2320256E01747923197B7731 /* orxKernel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "orxKernel.h"; path = "../../../include/Scroll/orx/orxKernel.h"; sourceTree = "<group>"; };
+		493D71E02C8E342E7593187D /* orxPluginAPI.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "orxPluginAPI.h"; path = "../../../include/Scroll/orx/orxPluginAPI.h"; sourceTree = "<group>"; };
+		49612B9D64B160F32F935C89 /* orxUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "orxUtils.h"; path = "../../../include/Scroll/orx/orxUtils.h"; sourceTree = "<group>"; };
+		69881EA65101343114143F54 /* orxBody.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "orxBody.h"; path = "../../../include/Scroll/orx/physics/orxBody.h"; sourceTree = "<group>"; };
+		5B6A2B97689C118274BB5E16 /* orxPhysics.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "orxPhysics.h"; path = "../../../include/Scroll/orx/physics/orxPhysics.h"; sourceTree = "<group>"; };
+		4C7B4A2A3BFC4B8E7CEA7E56 /* orxPlugin_CoreDefine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "orxPlugin_CoreDefine.h"; path = "../../../include/Scroll/orx/plugin/define/orxPlugin_CoreDefine.h"; sourceTree = "<group>"; };
+		7A3D3FBB43F267F86F5B78BB /* orxPlugin_CoreID.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "orxPlugin_CoreID.h"; path = "../../../include/Scroll/orx/plugin/define/orxPlugin_CoreID.h"; sourceTree = "<group>"; };
+		64747C467E31522726D90156 /* orxPlugin_Display.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "orxPlugin_Display.h"; path = "../../../include/Scroll/orx/plugin/define/orxPlugin_Display.h"; sourceTree = "<group>"; };
+		40BD47AB59E352753C7A1A88 /* orxPlugin_Joystick.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "orxPlugin_Joystick.h"; path = "../../../include/Scroll/orx/plugin/define/orxPlugin_Joystick.h"; sourceTree = "<group>"; };
+		16D709C655DE6A046DF521ED /* orxPlugin_Keyboard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "orxPlugin_Keyboard.h"; path = "../../../include/Scroll/orx/plugin/define/orxPlugin_Keyboard.h"; sourceTree = "<group>"; };
+		71AA0FDD2F5F1D0824A623BD /* orxPlugin_Mouse.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "orxPlugin_Mouse.h"; path = "../../../include/Scroll/orx/plugin/define/orxPlugin_Mouse.h"; sourceTree = "<group>"; };
+		5F72371C2AF8282B33092AA8 /* orxPlugin_Physics.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "orxPlugin_Physics.h"; path = "../../../include/Scroll/orx/plugin/define/orxPlugin_Physics.h"; sourceTree = "<group>"; };
+		388D367412A72691054D25DF /* orxPlugin_Render.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "orxPlugin_Render.h"; path = "../../../include/Scroll/orx/plugin/define/orxPlugin_Render.h"; sourceTree = "<group>"; };
+		7ED776415FD72CC900001BB0 /* orxPlugin_SoundSystem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "orxPlugin_SoundSystem.h"; path = "../../../include/Scroll/orx/plugin/define/orxPlugin_SoundSystem.h"; sourceTree = "<group>"; };
+		7BD8389D00E360403C233421 /* orxPlugin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "orxPlugin.h"; path = "../../../include/Scroll/orx/plugin/orxPlugin.h"; sourceTree = "<group>"; };
+		16D90E3D63F861D85A8A45A4 /* orxPluginCore.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "orxPluginCore.h"; path = "../../../include/Scroll/orx/plugin/orxPluginCore.h"; sourceTree = "<group>"; };
+		523664AC7C8274A46589300D /* orxPluginType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "orxPluginType.h"; path = "../../../include/Scroll/orx/plugin/orxPluginType.h"; sourceTree = "<group>"; };
+		539912DA62BA3F0510135F62 /* orxPluginUser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "orxPluginUser.h"; path = "../../../include/Scroll/orx/plugin/orxPluginUser.h"; sourceTree = "<group>"; };
+		56CF5CE201CD634206763298 /* orxCamera.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "orxCamera.h"; path = "../../../include/Scroll/orx/render/orxCamera.h"; sourceTree = "<group>"; };
+		596D20B15884530E53D763AF /* orxRender.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "orxRender.h"; path = "../../../include/Scroll/orx/render/orxRender.h"; sourceTree = "<group>"; };
+		21882362177252CC09871FDB /* orxShader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "orxShader.h"; path = "../../../include/Scroll/orx/render/orxShader.h"; sourceTree = "<group>"; };
+		245C396D3B1047CB7CC866BA /* orxShaderPointer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "orxShaderPointer.h"; path = "../../../include/Scroll/orx/render/orxShaderPointer.h"; sourceTree = "<group>"; };
+		4BC7282001ED2A480F4035DC /* orxViewport.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "orxViewport.h"; path = "../../../include/Scroll/orx/render/orxViewport.h"; sourceTree = "<group>"; };
+		04F30CB9493545D33A870C2D /* orxSound.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "orxSound.h"; path = "../../../include/Scroll/orx/sound/orxSound.h"; sourceTree = "<group>"; };
+		5EF123831B1248B035F2637C /* orxSoundPointer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "orxSoundPointer.h"; path = "../../../include/Scroll/orx/sound/orxSoundPointer.h"; sourceTree = "<group>"; };
+		7F3E434D2CC34EB824060B29 /* orxSoundSystem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "orxSoundSystem.h"; path = "../../../include/Scroll/orx/sound/orxSoundSystem.h"; sourceTree = "<group>"; };
+		2C8D61B974B147E44FA75E4A /* orxHashTable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "orxHashTable.h"; path = "../../../include/Scroll/orx/utils/orxHashTable.h"; sourceTree = "<group>"; };
+		04BF3BE82B42140716000FEB /* orxLinkList.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "orxLinkList.h"; path = "../../../include/Scroll/orx/utils/orxLinkList.h"; sourceTree = "<group>"; };
+		2ACD105557540CAF56002199 /* orxString.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "orxString.h"; path = "../../../include/Scroll/orx/utils/orxString.h"; sourceTree = "<group>"; };
+		7E640A832719674361FA0AC4 /* orxTree.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "orxTree.h"; path = "../../../include/Scroll/orx/utils/orxTree.h"; sourceTree = "<group>"; };
+		5459259D704D01A7229B13D3 /* lrj.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "lrj.h"; path = "../../../include/lrj.h"; sourceTree = "<group>"; };
+		4EA6299036C419121A6447E6 /* lrj.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "lrj.cpp"; path = "../../../src/lrj.cpp"; sourceTree = "<group>"; };
+		1081174F76F4239942745DAE /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "Foundation.framework"; path = "/System/Library/Frameworks/Foundation.framework"; sourceTree = "<absolute>"; };
+		7A5B1A9745996BC24392360D /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "AppKit.framework"; path = "/System/Library/Frameworks/AppKit.framework"; sourceTree = "<absolute>"; };
+		64A538DF679D7A7276833C2C /* ytterbited */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; name = "ytterbited"; path = "ytterbited"; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		046A03713017597A14E17BFF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4BC25F2C58205988210649EB /* Foundation.framework in Frameworks */,
+				1F742C6207881EE95F6836FC /* AppKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		284C4B305D0253984E5E2936 /* lrj */ = {
+			isa = PBXGroup;
+			children = (
+				25227BE652A8384077BA5C37 /* include */,
+				1531751D727B750C6AA52DB7 /* src */,
+				3381641F34947EEB1A4D427E /* Frameworks */,
+				6FBC281D0BCF6E863F062B66 /* Products */,
+			);
+			name = "lrj";
+			sourceTree = "<group>";
+		};
+		25227BE652A8384077BA5C37 /* include */ = {
+			isa = PBXGroup;
+			children = (
+				513E7B8E2D1A260F4E2C435E /* Scroll */,
+				5459259D704D01A7229B13D3 /* lrj.h */,
+			);
+			name = "include";
+			sourceTree = "<group>";
+		};
+		513E7B8E2D1A260F4E2C435E /* Scroll */ = {
+			isa = PBXGroup;
+			children = (
+				764D502F782A35BD36C40B5E /* Scroll.h */,
+				51A010097D63736376291CB3 /* ScrollBase.h */,
+				4790477D6F370B8E234046FF /* ScrollEd.h */,
+				1CBA0E30267A17FC4E236261 /* ScrollObject.h */,
+				06770D996D5D7A1F31832527 /* orx */,
+			);
+			name = "Scroll";
+			sourceTree = "<group>";
+		};
+		06770D996D5D7A1F31832527 /* orx */ = {
+			isa = PBXGroup;
+			children = (
+				2C3633F2586575D447115F0D /* anim */,
+				079D10D051066D572BF05918 /* base */,
+				000A293918FA7CE066EB6C08 /* core */,
+				725C254513C22C233B1630F1 /* debug */,
+				57BD45EC3E245439788B2C78 /* display */,
+				67A47DE773E953D775844064 /* io */,
+				56D204240B6F54CB0E382C12 /* main */,
+				4D5107995AB9583525A25970 /* math */,
+				1E1722E72BFC531524D86DCB /* memory */,
+				2E1F02803B8555574E661785 /* object */,
+				1C6342751D9759F42E794890 /* orx.h */,
+				1FE66D530312432E28C279AA /* orxInclude.h */,
+				2320256E01747923197B7731 /* orxKernel.h */,
+				493D71E02C8E342E7593187D /* orxPluginAPI.h */,
+				49612B9D64B160F32F935C89 /* orxUtils.h */,
+				56E4482C01F85BAC2C734A35 /* physics */,
+				7F3D3D2D6EAB2A9A16AF5765 /* plugin */,
+				2EC10BF8506006F027BB0B50 /* render */,
+				02CC2BD55AB261704073621B /* sound */,
+				6B695BE86B5201E174E17C85 /* utils */,
+			);
+			name = "orx";
+			sourceTree = "<group>";
+		};
+		2C3633F2586575D447115F0D /* anim */ = {
+			isa = PBXGroup;
+			children = (
+				72C166C4711E01583E420E7E /* orxAnim.h */,
+				2591060756584985693112C1 /* orxAnimPointer.h */,
+				6A6474EB24974EFB01E97CC7 /* orxAnimSet.h */,
+			);
+			name = "anim";
+			sourceTree = "<group>";
+		};
+		079D10D051066D572BF05918 /* base */ = {
+			isa = PBXGroup;
+			children = (
+				74951FBB4AA20C3D274C0983 /* orxDecl.h */,
+				209658C02C23635923ED49BC /* orxModule.h */,
+				6C574D91297B517D794675BB /* orxType.h */,
+			);
+			name = "base";
+			sourceTree = "<group>";
+		};
+		000A293918FA7CE066EB6C08 /* core */ = {
+			isa = PBXGroup;
+			children = (
+				34161DCE73F43B3676D55980 /* orxClock.h */,
+				003E1CA2589476BB190F2AA0 /* orxCommand.h */,
+				74D976B57EE9328A3F1D2762 /* orxConfig.h */,
+				3F5248074A4A6FC028CF3BBB /* orxConsole.h */,
+				76A23AFC130A02DA62B45562 /* orxEvent.h */,
+				414E1F864049203D1E671166 /* orxLocale.h */,
+				6E7966CB2409013D64064DFF /* orxResource.h */,
+				54147ABC0619019456AB10F9 /* orxSystem.h */,
+				6FF4018707AB083A2A48645C /* orxThread.h */,
+			);
+			name = "core";
+			sourceTree = "<group>";
+		};
+		725C254513C22C233B1630F1 /* debug */ = {
+			isa = PBXGroup;
+			children = (
+				4403292C0BD5594762DD2B40 /* orxDebug.h */,
+				7ACC71C21C8D257E7E221FA4 /* orxFPS.h */,
+				07BF15625CE33F106B2E2B4F /* orxProfiler.h */,
+			);
+			name = "debug";
+			sourceTree = "<group>";
+		};
+		57BD45EC3E245439788B2C78 /* display */ = {
+			isa = PBXGroup;
+			children = (
+				7E7B7959552704DB6F533BCF /* orxDisplay.h */,
+				446B60721C9C6E5B1D9474C1 /* orxFont.h */,
+				59BA6F501D0B40A610FF11ED /* orxGraphic.h */,
+				172A05F479DD3BFB1C2E46E6 /* orxScreenshot.h */,
+				34A631F377B679B709432DC3 /* orxText.h */,
+				02121430142E648F253231B7 /* orxTexture.h */,
+			);
+			name = "display";
+			sourceTree = "<group>";
+		};
+		67A47DE773E953D775844064 /* io */ = {
+			isa = PBXGroup;
+			children = (
+				25D559332F7A2A1C4C4A32D6 /* orxFile.h */,
+				1F6807B841D6088F13CE7873 /* orxInput.h */,
+				7046130C0F2211CF6B005F98 /* orxJoystick.h */,
+				167049BC7A6F2BDD58716C07 /* orxKeyboard.h */,
+				7DC256787583796D72A20D64 /* orxMouse.h */,
+			);
+			name = "io";
+			sourceTree = "<group>";
+		};
+		56D204240B6F54CB0E382C12 /* main */ = {
+			isa = PBXGroup;
+			children = (
+				000701A0547E58D45C1E68EA /* orxAndroid.h */,
+				0C6E49883D92685C7800046F /* orxParam.h */,
+			);
+			name = "main";
+			sourceTree = "<group>";
+		};
+		4D5107995AB9583525A25970 /* math */ = {
+			isa = PBXGroup;
+			children = (
+				7ED75C711364140305BA2B2F /* orxAABox.h */,
+				4DDB13262BC87B402F2E789B /* orxMath.h */,
+				2B437B8D72370E476E79590A /* orxOBox.h */,
+				2244463841EF5B8B2C7204A5 /* orxVector.h */,
+			);
+			name = "math";
+			sourceTree = "<group>";
+		};
+		1E1722E72BFC531524D86DCB /* memory */ = {
+			isa = PBXGroup;
+			children = (
+				3142049C45F9739619437F45 /* orxBank.h */,
+				3489219609405DD551B239A1 /* orxMemory.h */,
+			);
+			name = "memory";
+			sourceTree = "<group>";
+		};
+		2E1F02803B8555574E661785 /* object */ = {
+			isa = PBXGroup;
+			children = (
+				1F3B681A26196BE533C9050E /* orxFX.h */,
+				1AD746525E633F4A229035A1 /* orxFXPointer.h */,
+				7476276B7B7700597AC951F1 /* orxFrame.h */,
+				5E4A08464E696982082405CD /* orxObject.h */,
+				0A327D3F34833E12138E7DC8 /* orxSpawner.h */,
+				1053688067BF459D70C870F3 /* orxStructure.h */,
+				183F552E529B6C3811DF0750 /* orxTimeLine.h */,
+			);
+			name = "object";
+			sourceTree = "<group>";
+		};
+		56E4482C01F85BAC2C734A35 /* physics */ = {
+			isa = PBXGroup;
+			children = (
+				69881EA65101343114143F54 /* orxBody.h */,
+				5B6A2B97689C118274BB5E16 /* orxPhysics.h */,
+			);
+			name = "physics";
+			sourceTree = "<group>";
+		};
+		7F3D3D2D6EAB2A9A16AF5765 /* plugin */ = {
+			isa = PBXGroup;
+			children = (
+				57A67F1F736F380C2A6A3CB0 /* define */,
+				7BD8389D00E360403C233421 /* orxPlugin.h */,
+				16D90E3D63F861D85A8A45A4 /* orxPluginCore.h */,
+				523664AC7C8274A46589300D /* orxPluginType.h */,
+				539912DA62BA3F0510135F62 /* orxPluginUser.h */,
+			);
+			name = "plugin";
+			sourceTree = "<group>";
+		};
+		57A67F1F736F380C2A6A3CB0 /* define */ = {
+			isa = PBXGroup;
+			children = (
+				4C7B4A2A3BFC4B8E7CEA7E56 /* orxPlugin_CoreDefine.h */,
+				7A3D3FBB43F267F86F5B78BB /* orxPlugin_CoreID.h */,
+				64747C467E31522726D90156 /* orxPlugin_Display.h */,
+				40BD47AB59E352753C7A1A88 /* orxPlugin_Joystick.h */,
+				16D709C655DE6A046DF521ED /* orxPlugin_Keyboard.h */,
+				71AA0FDD2F5F1D0824A623BD /* orxPlugin_Mouse.h */,
+				5F72371C2AF8282B33092AA8 /* orxPlugin_Physics.h */,
+				388D367412A72691054D25DF /* orxPlugin_Render.h */,
+				7ED776415FD72CC900001BB0 /* orxPlugin_SoundSystem.h */,
+			);
+			name = "define";
+			sourceTree = "<group>";
+		};
+		2EC10BF8506006F027BB0B50 /* render */ = {
+			isa = PBXGroup;
+			children = (
+				56CF5CE201CD634206763298 /* orxCamera.h */,
+				596D20B15884530E53D763AF /* orxRender.h */,
+				21882362177252CC09871FDB /* orxShader.h */,
+				245C396D3B1047CB7CC866BA /* orxShaderPointer.h */,
+				4BC7282001ED2A480F4035DC /* orxViewport.h */,
+			);
+			name = "render";
+			sourceTree = "<group>";
+		};
+		02CC2BD55AB261704073621B /* sound */ = {
+			isa = PBXGroup;
+			children = (
+				04F30CB9493545D33A870C2D /* orxSound.h */,
+				5EF123831B1248B035F2637C /* orxSoundPointer.h */,
+				7F3E434D2CC34EB824060B29 /* orxSoundSystem.h */,
+			);
+			name = "sound";
+			sourceTree = "<group>";
+		};
+		6B695BE86B5201E174E17C85 /* utils */ = {
+			isa = PBXGroup;
+			children = (
+				2C8D61B974B147E44FA75E4A /* orxHashTable.h */,
+				04BF3BE82B42140716000FEB /* orxLinkList.h */,
+				2ACD105557540CAF56002199 /* orxString.h */,
+				7E640A832719674361FA0AC4 /* orxTree.h */,
+			);
+			name = "utils";
+			sourceTree = "<group>";
+		};
+		1531751D727B750C6AA52DB7 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				4EA6299036C419121A6447E6 /* lrj.cpp */,
+			);
+			name = "src";
+			sourceTree = "<group>";
+		};
+		3381641F34947EEB1A4D427E /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1081174F76F4239942745DAE /* Foundation.framework */,
+				7A5B1A9745996BC24392360D /* AppKit.framework */,
+			);
+			name = "Frameworks";
+			sourceTree = "<group>";
+		};
+		6FBC281D0BCF6E863F062B66 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				64A538DF679D7A7276833C2C /* ytterbited */,
+			);
+			name = "Products";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		1F4F28A9147A15FF4D513836 /* lrj */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 59C8017D58B975BE4D4E45F0 /* Build configuration list for PBXNativeTarget "lrj" */;
+			buildPhases = (
+				3D9A6C522C00666E72AA2567 /* Resources */,
+				35997C5F719C510F50EF0AB7 /* Sources */,
+				046A03713017597A14E17BFF /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "lrj";
+			productInstallPath = "$(HOME)/bin";
+			productName = "lrj";
+			productReference = 64A538DF679D7A7276833C2C /* ytterbited */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		08FB7793FE84155DC02AAC07 /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = 1DEB928908733DD80010E9CD /* Build configuration list for PBXProject "lrj" */;
+			compatibilityVersion = "Xcode 3.2";
+			hasScannedForEncodings = 1;
+			mainGroup = 284C4B305D0253984E5E2936 /* lrj */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				1F4F28A9147A15FF4D513836 /* ytterbited */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		3D9A6C522C00666E72AA2567 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		35997C5F719C510F50EF0AB7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				62D25853407B6BBA0DBB019E /* lrj.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		7CBE5A23557469E352375A07 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CONFIGURATION_BUILD_DIR = ../../../bin/mac;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_MODEL_TUNING = G5;
+				INSTALL_PATH = /usr/local/bin;
+				PRODUCT_NAME = "ytterbited";
+			};
+			name = "Debug";
+		};
+		075A2CAF546C3D6275322E12 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CONFIGURATION_BUILD_DIR = ../../../bin/mac;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_MODEL_TUNING = G5;
+				INSTALL_PATH = /usr/local/bin;
+				PRODUCT_NAME = "ytterbite";
+			};
+			name = "Release";
+		};
+		0C9A06B3692A768E6C481E32 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				CONFIGURATION_BUILD_DIR = "$(SYMROOT)";
+				CONFIGURATION_TEMP_DIR = "$(OBJROOT)";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_CPP_EXCEPTIONS = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"__orxDEBUG__",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"../../../include",
+					"../../../include/Scroll",
+					"../../../include/Scroll/orx",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"../../../lib/mac",
+				);
+				OBJROOT = "obj/Universal/Debug";
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_CFLAGS = (
+					"-ffast-math",
+					"-mmacosx-version-min=10.6",
+					"-gdwarf-2",
+					"-Wno-write-strings",
+					"-Wno-invalid-offsetof",
+					"-Wno-switch",
+				);
+				OTHER_LDFLAGS = (
+					"-lorxd",
+					"-mmacosx-version-min=10.6",
+					"-dead_strip",
+				);
+				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = static;
+				SYMROOT = "../../../bin/mac";
+			};
+			name = "Debug";
+		};
+		4E636F7A48DD46EE3EB62AF0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				CONFIGURATION_BUILD_DIR = "$(SYMROOT)";
+				CONFIGURATION_TEMP_DIR = "$(OBJROOT)";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_CPP_EXCEPTIONS = NO;
+				GCC_ENABLE_CPP_RTTI = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = NO;
+				GCC_OPTIMIZATION_LEVEL = s;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"../../../include",
+					"../../../include/Scroll",
+					"../../../include/Scroll/orx",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"../../../lib/mac",
+				);
+				OBJROOT = "obj/Universal/Release";
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_CFLAGS = (
+					"-ffast-math",
+					"-mmacosx-version-min=10.6",
+					"-gdwarf-2",
+					"-Wno-write-strings",
+					"-Wno-invalid-offsetof",
+					"-Wno-switch",
+				);
+				OTHER_LDFLAGS = (
+					"-lorx",
+					"-mmacosx-version-min=10.6",
+					"-dead_strip",
+				);
+				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = static;
+				SYMROOT = "../../../bin/mac";
+			};
+			name = "Release";
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		59C8017D58B975BE4D4E45F0 /* Build configuration list for PBXNativeTarget "ytterbited" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7CBE5A23557469E352375A07 /* Debug */,
+				075A2CAF546C3D6275322E12 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = "Debug";
+		};
+		1DEB928908733DD80010E9CD /* Build configuration list for PBXProject "lrj" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0C9A06B3692A768E6C481E32 /* Debug */,
+				4E636F7A48DD46EE3EB62AF0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = "Debug";
+		};
+/* End XCConfigurationList section */
+
+	};
+	rootObject = 08FB7793FE84155DC02AAC07 /* Project object */;
+}
