@@ -208,7 +208,8 @@ void Player::Update(const orxCLOCK_INFO &_stInfo)
 
 void Enemy::OnCreate()
 {
-  orxVECTOR vPos, vOffset;
+  orxVECTOR vPos = {}, vOffset;
+  Player   *poPlayer;
 
   // Gets HP
   ms32HP = orxConfig_GetS32("HP");
@@ -220,19 +221,34 @@ void Enemy::OnCreate()
   // Gets speed
   mfSpeed = orxConfig_GetFloat("Speed");
 
-  // Updates runtime variables
+  // Gets offset
+  orxConfig_GetVector("EnemySpawnOffset", &vOffset);
+
+  // Pushes RunTime section
   orxConfig_PushSection("RunTime");
+
+  // Updates speed
+  mfSpeed *= orxConfig_GetFloat("LevelSpeed");
+
+  // Updates runtime variables
   orxConfig_SetS32("LiveEnemy", orxConfig_GetS32("LiveEnemy") + 1);
   orxConfig_SetS32("EnemyLeft", orxConfig_GetS32("EnemyLeft") - 1);
-  orxConfig_PopSection();
 
-  // Gets offset
-  orxConfig_PushSection("Game");
-  orxConfig_GetVector("EnemySpawnOffset", &vOffset);
-  orxConfig_PopSection();
+  // Gets player
+  poPlayer = LRJ::GetInstance().GetObject<Player>(orxConfig_GetU64("P1"));
+
+  // Valid?
+  if(poPlayer)
+  {
+    // Gets its position
+    poPlayer->GetPosition(vPos);
+  }
 
   // Updates position
-  SetPosition(*orxVector_Add(&vPos, &GetPosition(vPos), orxVector_FromSphericalToCartesian(&vOffset, &vOffset)));
+  SetPosition(*orxVector_Add(&vPos, &vPos, orxVector_FromSphericalToCartesian(&vOffset, &vOffset)));
+
+  // Pops RunTime section
+  orxConfig_PopSection();
 }
 
 void Enemy::OnDelete()
@@ -277,18 +293,21 @@ orxBOOL Enemy::OnCollide(ScrollObject *_poCollider, const orxSTRING _zPartName, 
     // Death!
     SetLifeTime(orxFLOAT_0);
   }
+  else
+  {
+    //get direction of bullet and apply collision bounceback on the enemy
+    orxVECTOR bulletSpeedVector = {};
+    _poCollider->GetSpeed(bulletSpeedVector);
 
-  //get direction of bullet and apply collision bounceback on the enemy
-  orxVECTOR bulletSpeedVector = {};
-  _poCollider->GetSpeed(bulletSpeedVector);
+    orxVECTOR enemyPosition = {};
+    GetPosition(enemyPosition);
 
-  orxVECTOR enemyPosition = {};
-  GetPosition(enemyPosition);
+    orxVector_Divf(&bulletSpeedVector, &bulletSpeedVector, 50);
+    orxVector_Add(&enemyPosition, &enemyPosition, &bulletSpeedVector);
 
-  orxVector_Divf(&bulletSpeedVector, &bulletSpeedVector, 50);
-  orxVector_Add(&enemyPosition, &enemyPosition, &bulletSpeedVector);
-
-  SetPosition(enemyPosition);
+    SetPosition(enemyPosition);
+    AddSound("BumpSFX");
+  }
 
   // Kills collider
   _poCollider->SetLifeTime(orxFLOAT_0);
@@ -317,7 +336,6 @@ void Enemy::Update(const orxCLOCK_INFO &_stInfo)
 
     // Computes speed
     orxVector_Mulf(&vSpeed, orxVector_Normalize(&vSpeed, orxVector_Sub(&vSpeed, &vPlayerPos, &GetPosition(vPos))), mfSpeed);
-
   }
 
   // Applies speed
@@ -606,8 +624,16 @@ void LRJ::UpdateGame(const orxCLOCK_INFO &_rstInfo)
     // End of wave?
     if(s32LiveEnemy == 0)
     {
+      orxFLOAT  fSpeedInc;
+      orxS32    s32Level;
+
       // Gets next level
-      orxConfig_SetS32("Level", orxConfig_GetS32("Level") + 1);
+      s32Level = orxConfig_GetS32("Level") + 1;
+      orxConfig_SetS32("Level", s32Level);
+      orxConfig_PushSection("Game");
+      fSpeedInc = orxConfig_GetFloat("EnemySpeedLevelInc");
+      orxConfig_PopSection();
+      orxConfig_SetFloat("LevelSpeed", orxFLOAT_1 + fSpeedInc * orxS2F(s32Level));
 
       // Creates wave
       CreateWave();
@@ -670,6 +696,7 @@ void LRJ::Update(const orxCLOCK_INFO &_rstInfo)
         orxConfig_SetS32("LiveEnemy", 0);
         orxConfig_SetS32("EnemyLeft", 0);
         orxConfig_SetS32("Level", 0);
+        orxConfig_SetFloat("LevelSpeed", orxFLOAT_1);
         orxConfig_PopSection();
 
         // Creates scene
