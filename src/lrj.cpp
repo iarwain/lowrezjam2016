@@ -391,7 +391,7 @@ orxSTATUS LRJ::Save()
   if(zSavePath != orxSTRING_EMPTY)
   {
     // Saves to disk
-    eResult = orxConfig_Save(zSavePath, orxFALSE, SaveCallback);
+    eResult = orxConfig_Save(zSavePath, orxTRUE, SaveCallback);
   }
 
   // Done!
@@ -727,11 +727,30 @@ void LRJ::Update(const orxCLOCK_INFO &_rstInfo)
       // Should end?
       if(orxInput_IsActive("Stop"))
       {
+        orxS32 s32Score, s32HighScore;
+        orxS32 s32Level, s32HighLevel;
+
         // Creates game over object
         CreateObject("GameOver");
 
         // Updates state
         meGameState = GameStateGameOver;
+
+        // Gets score & level
+        orxConfig_PushSection("RunTime");
+        s32Score = orxConfig_GetS32("Score");
+        s32Level = orxConfig_GetS32("Level");
+        orxConfig_PopSection();
+
+        // Updates high score & level
+        orxConfig_PushSection("Save");
+        s32HighScore = orxConfig_GetS32("HighScore");
+        s32HighLevel = orxConfig_GetS32("HighLevel");
+        s32HighScore = orxMAX(s32Score, s32HighScore);
+        s32HighLevel = orxMAX(s32Level, s32HighLevel);
+        orxConfig_SetS32("HighScore", s32HighScore);
+        orxConfig_SetS32("HighLevel", s32HighLevel);
+        orxConfig_PopSection();
       }
       // Shoud reset?
       else if(orxInput_IsActive("Reset"))
@@ -760,6 +779,9 @@ void LRJ::Update(const orxCLOCK_INFO &_rstInfo)
 
         // Deletes scene
         DeleteRunTimeObject("Scene");
+
+        // Save
+        Save();
       }
 
       break;
