@@ -14,3 +14,5 @@ obj
 dev.ini
 *.sav
 *sdf
+lrj/data
+lrj/export

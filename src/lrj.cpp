@@ -48,8 +48,9 @@ protected:
 
 private:
 
-  orxS32  ms32HP;
-  orxS32  ms32Score;
+  orxS32    ms32HP;
+  orxS32    ms32Score;
+  orxFLOAT  mfSpeed;
 };
 
 
@@ -207,6 +208,9 @@ void Player::Update(const orxCLOCK_INFO &_stInfo)
 
 void Enemy::OnCreate()
 {
+  orxVECTOR vPos = {}, vOffset;
+  Player   *poPlayer;
+
   // Gets HP
   ms32HP = orxConfig_GetS32("HP");
   orxASSERT(ms32HP);
@@ -214,10 +218,37 @@ void Enemy::OnCreate()
   // Gets score
   ms32Score = orxConfig_GetS32("Score");
 
-  // Increment enemy count
-  LRJ::GetInstance().IncrementEnemyCount();
+  // Gets speed
+  mfSpeed = orxConfig_GetFloat("Speed");
 
-  // Create enemy close to the player, in a random radius from it.
+  // Gets offset
+  orxConfig_GetVector("EnemySpawnOffset", &vOffset);
+
+  // Pushes RunTime section
+  orxConfig_PushSection("RunTime");
+
+  // Updates speed
+  mfSpeed *= orxConfig_GetFloat("LevelSpeed");
+
+  // Updates runtime variables
+  orxConfig_SetS32("LiveEnemy", orxConfig_GetS32("LiveEnemy") + 1);
+  orxConfig_SetS32("EnemyLeft", orxConfig_GetS32("EnemyLeft") - 1);
+
+  // Gets player
+  poPlayer = LRJ::GetInstance().GetObject<Player>(orxConfig_GetU64("P1"));
+
+  // Valid?
+  if(poPlayer)
+  {
+    // Gets its position
+    poPlayer->GetPosition(vPos);
+  }
+
+  // Updates position
+  SetPosition(*orxVector_Add(&vPos, &vPos, orxVector_FromSphericalToCartesian(&vOffset, &vOffset)));
+
+  // Pops RunTime section
+  orxConfig_PopSection();
 }
 
 void Enemy::OnDelete()
@@ -241,12 +272,10 @@ void Enemy::OnDelete()
       poExplosion->SetPosition(GetPosition(vPos));
     }
 
-    // Decrements enemy count
-    LRJ::GetInstance().DecrementEnemyCount();
-
-    // Updates score
+    // Updates runtime variables
     orxConfig_PushSection("RunTime");
     orxConfig_SetS32("Score", orxConfig_GetS32("Score") + ms32Score);
+    orxConfig_SetS32("LiveEnemy", orxConfig_GetS32("LiveEnemy") - 1);
     orxConfig_PopSection();
   }
 }
@@ -264,19 +293,21 @@ orxBOOL Enemy::OnCollide(ScrollObject *_poCollider, const orxSTRING _zPartName, 
     // Death!
     SetLifeTime(orxFLOAT_0);
   }
+  else
+  {
+    //get direction of bullet and apply collision bounceback on the enemy
+    orxVECTOR bulletSpeedVector = {};
+    _poCollider->GetSpeed(bulletSpeedVector);
 
-  //get direction of bullet and apply collision bounceback on the enemy
-  orxVECTOR bulletSpeedVector = {};
-  _poCollider->GetSpeed(bulletSpeedVector);
+    orxVECTOR enemyPosition = {};
+    GetPosition(enemyPosition);
 
-  orxVECTOR enemyPosition = {};
-  GetPosition(enemyPosition);
+    orxVector_Divf(&bulletSpeedVector, &bulletSpeedVector, 50);
+    orxVector_Add(&enemyPosition, &enemyPosition, &bulletSpeedVector);
 
-  orxVector_Divf(&bulletSpeedVector, &bulletSpeedVector, 50);
-  orxVector_Add(&enemyPosition, &enemyPosition, &bulletSpeedVector);
-
-  SetPosition(enemyPosition);
-
+    SetPosition(enemyPosition);
+    AddSound("BumpSFX");
+  }
 
   // Kills collider
   _poCollider->SetLifeTime(orxFLOAT_0);
@@ -287,9 +318,28 @@ orxBOOL Enemy::OnCollide(ScrollObject *_poCollider, const orxSTRING _zPartName, 
 
 void Enemy::Update(const orxCLOCK_INFO &_stInfo)
 {
-  //
-  // Move the enemy towards the player's position.
-  //
+  orxVECTOR vSpeed = {};
+  Player   *poPlayer;
+
+  // Gets player
+  orxConfig_PushSection("RunTime");
+  poPlayer = LRJ::GetInstance().GetObject<Player>(orxConfig_GetU64("P1"));
+  orxConfig_PopSection();
+
+  // Valid?
+  if(poPlayer)
+  {
+    orxVECTOR vPos, vPlayerPos;
+
+    // Gets its position
+    poPlayer->GetPosition(vPlayerPos);
+
+    // Computes speed
+    orxVector_Mulf(&vSpeed, orxVector_Normalize(&vSpeed, orxVector_Sub(&vSpeed, &vPlayerPos, &GetPosition(vPos))), mfSpeed);
+  }
+
+  // Applies speed
+  SetSpeed(vSpeed);
 }
 
 static orxBOOL orxFASTCALL SaveCallback(const orxSTRING _zSectionName, const orxSTRING _zKeyName, const orxSTRING _zFileName, orxBOOL _bUseEncryption)
@@ -341,7 +391,7 @@ orxSTATUS LRJ::Save()
   if(zSavePath != orxSTRING_EMPTY)
   {
     // Saves to disk
-    eResult = orxConfig_Save(zSavePath, orxFALSE, SaveCallback);
+    eResult = orxConfig_Save(zSavePath, orxTRUE, SaveCallback);
   }
 
   // Done!
@@ -403,21 +453,92 @@ void LRJ::Reset()
   meGameState = GameStateReset;
 }
 
-void LRJ::UpdateInteraction(const orxCLOCK_INFO &_rstInfo)
+void LRJ::CreateWave()
 {
-  orxVECTOR     vMousePos, vPickPos;
-  orxU64        u64PickedID = 0;
-  ScrollObject *poPickedObject = orxNULL, *poInteractionObject;
+  const orxSTRING zName;
+  ScrollObject   *poEnemies;
+  orxS32          s32Level, s32Total;
 
-  // Gets world mouse position
-  if(orxRender_GetWorldPosition(orxMouse_GetPosition(&vMousePos), orxNULL, &vMousePos) != orxNULL)
+  // Deletes current wave
+  DeleteRunTimeObject("Wave");
+
+  // Gets levels & enemy root object
+  orxConfig_PushSection("RunTime");
+  s32Level = orxConfig_GetS32("Level");
+  poEnemies = GetObject(orxConfig_GetU64("Enemies"));
+  orxASSERT(poEnemies);
+  orxConfig_PopSection();
+
+  // Gets level name
+  orxConfig_PushSection("Game");
+  zName = orxConfig_GetListString("LevelList", s32Level % orxConfig_GetListCounter("LevelList"));
+  orxConfig_PopSection();
+
+  // Pushes level section
+  orxConfig_PushSection(zName);
+
+  // Disables enemies
+  poEnemies->Enable(orxFALSE);
+
+  // For all enemy spawners
+  for(orxOBJECT *pstChild = orxObject_GetOwnedChild(poEnemies->GetOrxObject());
+      pstChild;
+      pstChild = orxObject_GetOwnedSibling(pstChild))
   {
-    // Stores it
-    orxVector_Set(&mvMousePosition, vMousePos.fX, vMousePos.fY, orxFLOAT_0);
+    orxSPAWNER *pstSpawner;
+
+    // Gets its spawner
+    pstSpawner = orxOBJECT_GET_STRUCTURE(pstChild, SPAWNER);
+
+    // Valid?
+    if(pstSpawner)
+    {
+      orxU32 u32ActiveObject;
+
+      // Gets number of active objects
+      u32ActiveObject = orxConfig_GetU32(orxObject_GetName(pstChild));
+
+      // Valid?
+      if(u32ActiveObject)
+      {
+        // Updates spawner
+        orxSpawner_SetActiveObjectLimit(pstSpawner, u32ActiveObject);
+        orxSpawner_Reset(pstSpawner);
+        orxObject_Enable(pstChild, orxTRUE);
+      }
+    }
   }
 
+  // Updates enemy left count
+  s32Total = orxConfig_GetS32("TotalEnemies");
+  orxConfig_PushSection("RunTime");
+  orxConfig_SetS32("EnemyLeft", s32Total);
+  orxConfig_PopSection();
+
+  // Pops config section
+  orxConfig_PopSection();
+
+  // Creates wave
+  CreateObject("O-Wave");
+}
+
+void LRJ::UpdateInteraction(const orxCLOCK_INFO &_rstInfo)
+{
+  orxVECTOR     vPickPos = {};
+  orxU64        u64PickedID = 0;
+  ScrollObject *poPickedObject = orxNULL, *poInteractionObject, *poCamera;
+
+  // Gets camera position
+  orxConfig_PushSection("RunTime");
+  poCamera = GetObject(orxConfig_GetU64("Camera"));
+  if(poCamera)
+  {
+    poCamera->GetPosition(vPickPos, orxTRUE);
+  }
+  orxConfig_PopSection();
+
   // Gets picking position
-  orxVector_Set(&vPickPos, mvMousePosition.fX, mvMousePosition.fY, -orxFLOAT_1);
+  orxVector_Set(&vPickPos, vPickPos.fX, vPickPos.fY, -orxFLOAT_1);
 
   // For all pickable groups
   for(orxU32 i = 0, u32Number = orxConfig_GetListCounter("PickGroupList"); i < u32Number; i++)
@@ -488,13 +609,53 @@ void LRJ::UpdateShader(const orxCLOCK_INFO &_rstInfo)
 
 void LRJ::UpdateGame(const orxCLOCK_INFO &_rstInfo)
 {
-  //
-  // Create an enemy type if one is required, by checking, for example:
-  //        Level5
-  //          if EnemyAAtOnce = 2 and there is only one on screen?
-  //            Create another one if the
-  //            total onscreen + totalEnemiesRemainingInLevel < Config/Level5/TotalEnemies
-  //
+  orxS32 s32LiveEnemy, s32EnemyLeft;
+
+  // Pushes runtime section
+  orxConfig_PushSection("RunTime");
+
+  // Gets current enemy counts
+  s32LiveEnemy = orxConfig_GetS32("LiveEnemy");
+  s32EnemyLeft = orxConfig_GetS32("EnemyLeft");
+
+  // No more spawning?
+  if(s32EnemyLeft <= 0)
+  {
+    // End of wave?
+    if(s32LiveEnemy == 0)
+    {
+      orxFLOAT  fSpeedInc;
+      orxS32    s32Level;
+
+      // Gets next level
+      s32Level = orxConfig_GetS32("Level") + 1;
+      orxConfig_SetS32("Level", s32Level);
+      orxConfig_PushSection("Game");
+      fSpeedInc = orxConfig_GetFloat("EnemySpeedLevelInc");
+      orxConfig_PopSection();
+      orxConfig_SetFloat("LevelSpeed", orxFLOAT_1 + fSpeedInc * orxS2F(s32Level));
+
+      // Creates wave
+      CreateWave();
+    }
+    else
+    {
+      ScrollObject *poEnemies;
+
+      // Gets enemy root object
+      poEnemies = GetObject(orxConfig_GetU64("Enemies"));
+
+      // Valid?
+      if(poEnemies)
+      {
+        // Disables it
+        poEnemies->Enable(orxFALSE);
+      }
+    }
+  }
+
+  // Pops section
+  orxConfig_PopSection();
 
   // Updates in-game time
   mdTime += orx2D(_rstInfo.fDT);
@@ -529,13 +690,20 @@ void LRJ::Update(const orxCLOCK_INFO &_rstInfo)
       // Shoud start?
       if(orxInput_IsActive("Start"))
       {
-        // Clears score
+        // Clears RunTime variables
         orxConfig_PushSection("RunTime");
         orxConfig_SetS32("Score", 0);
+        orxConfig_SetS32("LiveEnemy", 0);
+        orxConfig_SetS32("EnemyLeft", 0);
+        orxConfig_SetS32("Level", 0);
+        orxConfig_SetFloat("LevelSpeed", orxFLOAT_1);
         orxConfig_PopSection();
 
         // Creates scene
         CreateObject("O-Scene");
+
+        // Creates wave
+        CreateWave();
 
         // Updates state
         meGameState = GameStateRun;
@@ -559,11 +727,30 @@ void LRJ::Update(const orxCLOCK_INFO &_rstInfo)
       // Should end?
       if(orxInput_IsActive("Stop"))
       {
+        orxS32 s32Score, s32HighScore;
+        orxS32 s32Level, s32HighLevel;
+
         // Creates game over object
         CreateObject("GameOver");
 
         // Updates state
         meGameState = GameStateGameOver;
+
+        // Gets score & level
+        orxConfig_PushSection("RunTime");
+        s32Score = orxConfig_GetS32("Score");
+        s32Level = orxConfig_GetS32("Level");
+        orxConfig_PopSection();
+
+        // Updates high score & level
+        orxConfig_PushSection("Save");
+        s32HighScore = orxConfig_GetS32("HighScore");
+        s32HighLevel = orxConfig_GetS32("HighLevel");
+        s32HighScore = orxMAX(s32Score, s32HighScore);
+        s32HighLevel = orxMAX(s32Level, s32HighLevel);
+        orxConfig_SetS32("HighScore", s32HighScore);
+        orxConfig_SetS32("HighLevel", s32HighLevel);
+        orxConfig_PopSection();
       }
       // Shoud reset?
       else if(orxInput_IsActive("Reset"))
@@ -589,6 +776,12 @@ void LRJ::Update(const orxCLOCK_INFO &_rstInfo)
       {
         // Deletes scene
         DeleteRunTimeObject("GameOver");
+
+        // Deletes scene
+        DeleteRunTimeObject("Scene");
+
+        // Save
+        Save();
       }
 
       break;
@@ -601,9 +794,6 @@ void LRJ::Update(const orxCLOCK_INFO &_rstInfo)
 
       // Creates splash object
       CreateObject("O-Reset");
-
-      // Clears enemy count
-      mu32EnemyCount = 0;
 
       // Updates state
       meGameState = GameStateInit;
@@ -663,11 +853,9 @@ void LRJ::CameraUpdate(const orxCLOCK_INFO &_rstInfo)
         }
         else
         {
-          orxConfig_PushSection("RunTime");
-
           // Retrieve head for its rotation
+          orxConfig_PushSection("RunTime");
           orxU64 mu64HeadID = orxConfig_GetU64("P1Head");
-
           orxConfig_PopSection();
 
           ScrollObject *poHead = LRJ::GetInstance().GetObject(mu64HeadID);
@@ -731,8 +919,6 @@ orxSTATUS LRJ::Init()
   meGameState       = GameStateInit;
   mu64InteractionID = 0;
   mdTime            = orx2D(0.0);
-  mu32EnemyCount    = 0;
-  orxVector_Copy(&mvMousePosition, &orxVECTOR_0);
 
   // Loads config
   Load();
@@ -761,13 +947,6 @@ orxSTATUS LRJ::Init()
 
   // Adds event handler
   orxEvent_AddHandler(orxEVENT_TYPE_SHADER, &EventHandler);
-
-  //
-  // Load in totalEnemiesRemainingInLevel for the level from the config. Though this
-  // needs to be in a level load event of some sort.
-  //
-
-
 
   // Done!
   return eResult;
