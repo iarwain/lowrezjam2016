@@ -346,12 +346,14 @@ orxBOOL Enemy::OnCollide(ScrollObject *_poCollider, const orxSTRING _zPartName, 
 
 void Enemy::Update(const orxCLOCK_INFO &_stInfo)
 {
-  orxVECTOR vSpeed = {};
-  Player   *poPlayer;
+  orxVECTOR     vSpeed = {};
+  Player       *poPlayer;
+  ScrollObject *poCamera;
 
-  // Gets player
+  // Gets player & camera
   orxConfig_PushSection("RunTime");
   poPlayer = LRJ::GetInstance().GetObject<Player>(orxConfig_GetU64("P1"));
+  poCamera = LRJ::GetInstance().GetObject(orxConfig_GetU64("Camera"));
   orxConfig_PopSection();
 
   // Valid?
@@ -368,6 +370,72 @@ void Enemy::Update(const orxCLOCK_INFO &_stInfo)
 
   // Applies speed
   SetSpeed(vSpeed);
+
+  // Is camera valid?
+  if(poCamera)
+  {
+    orxOBJECT *pstMarker;
+
+    // Gets marker
+    pstMarker = orxObject_GetOwnedChild(GetOrxObject());
+
+    // Valid?
+    if(pstMarker)
+    {
+      orxVECTOR vCameraPos, vPos, vOffset = {};
+      orxFLOAT  fThreshold, fBorder;
+
+      // Gets camera threshold & border
+      fThreshold  = orxConfig_GetFloat("CameraThreshold");
+      fBorder     = orxConfig_GetFloat("CameraBorder");
+
+      // Gets its position
+      poCamera->GetPosition(vCameraPos, orxTRUE);
+
+      // Gets enemy's position
+      GetPosition(vPos, orxTRUE);
+
+      // Gets offset
+      orxVector_Sub(&vOffset, &vPos, &vCameraPos);
+
+      // Outside of screen
+      if((orxMath_Abs(vOffset.fX) > fThreshold)
+      || (orxMath_Abs(vOffset.fY) > fThreshold))
+      {
+        // Computes marker offset
+        if(vOffset.fX > fThreshold - fBorder + 1)
+        {
+          vOffset.fX = fThreshold - fBorder + 1;
+        }
+        else if(vOffset.fX < -fThreshold + fBorder)
+        {
+          vOffset.fX = -fThreshold + fBorder;
+        }
+        if(vOffset.fY > fThreshold - fBorder + 1)
+        {
+          vOffset.fY = fThreshold - fBorder + 1;
+        }
+        else if(vOffset.fY < -fThreshold + fBorder)
+        {
+          vOffset.fY = -fThreshold + fBorder;
+        }
+
+        // Computes marker pos
+        orxObject_GetPosition(pstMarker, &vPos);
+        vPos.fX = vOffset.fX;
+        vPos.fY = vOffset.fY;
+
+        // Shows marker
+        orxObject_Enable(pstMarker, orxTRUE);
+        orxObject_SetPosition(pstMarker, &vPos);
+      }
+      else
+      {
+        // Hides marker
+        orxObject_Enable(pstMarker, orxFALSE);
+      }
+    }
+  }
 }
 
 static orxBOOL orxFASTCALL SaveCallback(const orxSTRING _zSectionName, const orxSTRING _zKeyName, const orxSTRING _zFileName, orxBOOL _bUseEncryption)
@@ -828,6 +896,12 @@ void LRJ::Update(const orxCLOCK_INFO &_rstInfo)
 
       break;
     }
+  }
+
+  // Screenshot?
+  if(orxInput_IsActive("Screenshot") && orxInput_HasNewStatus("Screenshot"))
+  {
+    orxScreenshot_Capture();
   }
 }
 
