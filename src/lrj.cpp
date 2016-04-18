@@ -403,17 +403,17 @@ void Enemy::Update(const orxCLOCK_INFO &_stInfo)
       || (orxMath_Abs(vOffset.fY) > fThreshold))
       {
         // Computes marker offset
-        if(vOffset.fX > fThreshold - fBorder + 1)
+        if(vOffset.fX > fThreshold - fBorder)
         {
-          vOffset.fX = fThreshold - fBorder + 1;
+          vOffset.fX = fThreshold - fBorder;
         }
         else if(vOffset.fX < -fThreshold + fBorder)
         {
           vOffset.fX = -fThreshold + fBorder;
         }
-        if(vOffset.fY > fThreshold - fBorder + 1)
+        if(vOffset.fY > fThreshold - fBorder)
         {
-          vOffset.fY = fThreshold - fBorder + 1;
+          vOffset.fY = fThreshold - fBorder;
         }
         else if(vOffset.fY < -fThreshold + fBorder)
         {
