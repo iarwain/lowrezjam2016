@@ -903,6 +903,18 @@ void LRJ::Update(const orxCLOCK_INFO &_rstInfo)
   {
     orxScreenshot_Capture();
   }
+
+  // Toggle SFX?
+  if(orxInput_IsActive("ToggleSFX") && orxInput_HasNewStatus("ToggleSFX"))
+  {
+    orxSound_SetBusVolume(orxString_ToCRC("SFX"), orxFLOAT_1 - orxSound_GetBusVolume(orxString_ToCRC("SFX")));
+  }
+
+  // Toggle Music?
+  if(orxInput_IsActive("ToggleMusic") && orxInput_HasNewStatus("ToggleMusic"))
+  {
+    orxSound_SetBusVolume(orxString_ToCRC("Music"), orxFLOAT_1 - orxSound_GetBusVolume(orxString_ToCRC("Music")));
+  }
 }
 
 void LRJ::CameraUpdate(const orxCLOCK_INFO &_rstInfo)
