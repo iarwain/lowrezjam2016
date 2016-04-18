@@ -1,0 +1,30 @@
+#!/bin/sh
+
+if [ "${YTTERBITE_PATH}" = "" ]; then
+    YTTERBITE_PATH=`dirname "$0"`
+fi
+
+if [ "${YTTERBITE_ARCH}" = "" ]; then
+    YTTERBITE_ARCH=`uname -m`
+fi
+
+cd "$YTTERBITE_PATH"
+
+if [ ! -f ytterbite.desktop ]; then
+    echo "Ytterbite: creating desktop shortcut."
+    echo "[Desktop Entry]
+Version=1.0
+Type=Application
+Terminal=false
+Exec=\"`pwd`/ytterbite\"
+Name=Ytterbite
+Icon=`pwd`/ytterbite.png" > ytterbite.desktop
+fi
+
+if [ "${YTTERBITE_ARCH}" = "x86_64" ]; then
+    echo "Ytterbite: Using amd64 version."
+    cd "$YTTERBITE_PATH/amd64"
+else
+    echo "Ytterbite: Sorry, there's no x86 version!"
+fi
+LD_LIBRARY_PATH=.:$LD_LIBRARY_PATH exec ./ytterbite "$@"
