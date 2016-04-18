@@ -182,7 +182,7 @@ project "lrj"
         "../src/**.cpp",
         "../include/**.h"
     }
-    targetname ("lrj")
+    targetname ("ytterbite")
 
 
     configuration {"vs*"}

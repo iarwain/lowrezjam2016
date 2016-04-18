@@ -32,6 +32,7 @@ private:
   const orxSTRING mzID;
         orxU64    mu64GunID;
         orxU64    mu64HeadID;
+  const orxSTRING mzLastInput;
 };
 
 class Enemy : public ScrollObject
@@ -78,6 +79,9 @@ void Player::OnCreate()
 
   // Inits ID
   mzID = orxConfig_GetString("ID");
+
+  // Inits last input
+  mzLastInput = orxNULL;
 
   // Pushes RunTime section
   orxConfig_PushSection("RunTime");
@@ -136,39 +140,63 @@ void Player::Update(const orxCLOCK_INFO &_stInfo)
   orxVECTOR     vSpeed = {}, vPos;
   ScrollObject *poGun;
   orxFLOAT      fSpeed, fRotation = -orxFLOAT_1;
+  orxBOOL       bKeepRotation = orxFALSE;
 
   // Gets speed
   PushConfigSection();
   fSpeed = orxConfig_GetFloat("Speed");
   PopConfigSection();
 
+  // Last input still active?
+  if(mzLastInput && IsInputActive(mzLastInput))
+  {
+    // Keeps rotation
+    bKeepRotation = orxTRUE;
+  }
+
   // Left?
   if(IsInputActive("Left"))
   {
     // Updates speed & orientation
     vSpeed.fX -= fSpeed;
-    fRotation = orxMATH_KF_PI + orxMATH_KF_PI_BY_2;
+    if(IsInputActive("Left", orxTRUE) || !bKeepRotation)
+    {
+      fRotation = orxMATH_KF_PI + orxMATH_KF_PI_BY_2;
+      mzLastInput = "Left";
+    }
   }
   // Right?
   if(IsInputActive("Right"))
   {
     // Updates speed & orientation
     vSpeed.fX += fSpeed;
-    fRotation = orxMATH_KF_PI_BY_2;
+    if(IsInputActive("Right", orxTRUE) || !bKeepRotation)
+    {
+      fRotation = orxMATH_KF_PI_BY_2;
+      mzLastInput = "Right";
+    }
   }
   // Down?
   if(IsInputActive("Down"))
   {
     // Updates speed & orientation
     vSpeed.fY += fSpeed;
-    fRotation = orxMATH_KF_PI;
+    if(IsInputActive("Down", orxTRUE) || !bKeepRotation)
+    {
+      fRotation = orxMATH_KF_PI;
+      mzLastInput = "Down";
+    }
   }
   // Up?
   if(IsInputActive("Up"))
   {
     // Updates speed & orientation
     vSpeed.fY -= fSpeed;
-    fRotation = orxFLOAT_0;
+    if(IsInputActive("Up", orxTRUE) || !bKeepRotation)
+    {
+      fRotation = orxFLOAT_0;
+      mzLastInput = "Up";
+    }
   }
 
   // Applies speed
@@ -318,12 +346,14 @@ orxBOOL Enemy::OnCollide(ScrollObject *_poCollider, const orxSTRING _zPartName, 
 
 void Enemy::Update(const orxCLOCK_INFO &_stInfo)
 {
-  orxVECTOR vSpeed = {};
-  Player   *poPlayer;
+  orxVECTOR     vSpeed = {};
+  Player       *poPlayer;
+  ScrollObject *poCamera;
 
-  // Gets player
+  // Gets player & camera
   orxConfig_PushSection("RunTime");
   poPlayer = LRJ::GetInstance().GetObject<Player>(orxConfig_GetU64("P1"));
+  poCamera = LRJ::GetInstance().GetObject(orxConfig_GetU64("Camera"));
   orxConfig_PopSection();
 
   // Valid?
@@ -336,18 +366,76 @@ void Enemy::Update(const orxCLOCK_INFO &_stInfo)
 
     // Computes speed
     orxVector_Mulf(&vSpeed, orxVector_Normalize(&vSpeed, orxVector_Sub(&vSpeed, &vPlayerPos, &GetPosition(vPos))), mfSpeed);
-
-    // Enemy to far from player? Reverse enemy position to other side of the player
-    orxFLOAT distance = orxVector_GetDistance(&vPlayerPos, &vPos);
-    if (distance > 100){
-      orxVector_Lerp(&vPos, &vPos, &vPlayerPos, 2);
-      SetPosition(vPos);
-    }
-
   }
 
   // Applies speed
   SetSpeed(vSpeed);
+
+  // Is camera valid?
+  if(poCamera)
+  {
+    orxOBJECT *pstMarker;
+
+    // Gets marker
+    pstMarker = orxObject_GetOwnedChild(GetOrxObject());
+
+    // Valid?
+    if(pstMarker)
+    {
+      orxVECTOR vCameraPos, vPos, vOffset = {};
+      orxFLOAT  fThreshold, fBorder;
+
+      // Gets camera threshold & border
+      fThreshold  = orxConfig_GetFloat("CameraThreshold");
+      fBorder     = orxConfig_GetFloat("CameraBorder");
+
+      // Gets its position
+      poCamera->GetPosition(vCameraPos, orxTRUE);
+
+      // Gets enemy's position
+      GetPosition(vPos, orxTRUE);
+
+      // Gets offset
+      orxVector_Sub(&vOffset, &vPos, &vCameraPos);
+
+      // Outside of screen
+      if((orxMath_Abs(vOffset.fX) > fThreshold)
+      || (orxMath_Abs(vOffset.fY) > fThreshold))
+      {
+        // Computes marker offset
+        if(vOffset.fX > fThreshold - fBorder)
+        {
+          vOffset.fX = fThreshold - fBorder;
+        }
+        else if(vOffset.fX < -fThreshold + fBorder)
+        {
+          vOffset.fX = -fThreshold + fBorder;
+        }
+        if(vOffset.fY > fThreshold - fBorder)
+        {
+          vOffset.fY = fThreshold - fBorder;
+        }
+        else if(vOffset.fY < -fThreshold + fBorder)
+        {
+          vOffset.fY = -fThreshold + fBorder;
+        }
+
+        // Computes marker pos
+        orxObject_GetPosition(pstMarker, &vPos);
+        vPos.fX = vOffset.fX;
+        vPos.fY = vOffset.fY;
+
+        // Shows marker
+        orxObject_Enable(pstMarker, orxTRUE);
+        orxObject_SetPosition(pstMarker, &vPos);
+      }
+      else
+      {
+        // Hides marker
+        orxObject_Enable(pstMarker, orxFALSE);
+      }
+    }
+  }
 }
 
 static orxBOOL orxFASTCALL SaveCallback(const orxSTRING _zSectionName, const orxSTRING _zKeyName, const orxSTRING _zFileName, orxBOOL _bUseEncryption)
@@ -446,8 +534,8 @@ orxSTATUS LRJ::Bootstrap() const
   orxArchive_Init();
 
   // Adds default release config paths
-  orxResource_AddStorage(orxCONFIG_KZ_RESOURCE_GROUP, "../data.lrj", orxFALSE);
-  orxResource_AddStorage(orxCONFIG_KZ_RESOURCE_GROUP, "data.lrj", orxFALSE);
+  orxResource_AddStorage(orxCONFIG_KZ_RESOURCE_GROUP, "../data.ytb", orxFALSE);
+  orxResource_AddStorage(orxCONFIG_KZ_RESOURCE_GROUP, "data.ytb", orxFALSE);
   orxResource_AddStorage(orxCONFIG_KZ_RESOURCE_GROUP, "../../data/config", orxFALSE);
   orxResource_AddStorage(orxCONFIG_KZ_RESOURCE_GROUP, "../data/config", orxFALSE);
 
@@ -808,6 +896,24 @@ void LRJ::Update(const orxCLOCK_INFO &_rstInfo)
 
       break;
     }
+  }
+
+  // Screenshot?
+  if(orxInput_IsActive("Screenshot") && orxInput_HasNewStatus("Screenshot"))
+  {
+    orxScreenshot_Capture();
+  }
+
+  // Toggle SFX?
+  if(orxInput_IsActive("ToggleSFX") && orxInput_HasNewStatus("ToggleSFX"))
+  {
+    orxSound_SetBusVolume(orxString_ToCRC("SFX"), orxFLOAT_1 - orxSound_GetBusVolume(orxString_ToCRC("SFX")));
+  }
+
+  // Toggle Music?
+  if(orxInput_IsActive("ToggleMusic") && orxInput_HasNewStatus("ToggleMusic"))
+  {
+    orxSound_SetBusVolume(orxString_ToCRC("Music"), orxFLOAT_1 - orxSound_GetBusVolume(orxString_ToCRC("Music")));
   }
 }
 
