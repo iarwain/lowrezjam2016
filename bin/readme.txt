@@ -39,7 +39,7 @@ Credits
 -------
 Programming: Iarwain
 Graphics:    FullyBugged
-Music / Sound / Design / Additional gdx and code: Sausage
+Music / Sound / Design / Additional gfx and code: Sausage
 
 Game Info
 ---------
